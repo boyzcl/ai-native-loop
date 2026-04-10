@@ -89,6 +89,8 @@ Skill 会：
   面向 GitHub 开源发布的完成度检查。
 - `docs/cases/case-01-self-bootstrap.md`
   首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
+- `docs/cases/case-02-mrna-research-to-report.md`
+  外部案例：复杂研究任务如何被组织成调查、技术重建与最终成稿的闭环。
 - `docs/iteration-assessment-against-web-access.md`
   对标 `web-access` 后形成的迭代评估与优先级清单。
 - `docs/trigger-examples.md`

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- Case 02 documenting how the skill transfers to a research-and-writing workflow via the Rosie mRNA investigation chain
+
 ## v0.1.0 - 2026-04-11
 
 ### Added
