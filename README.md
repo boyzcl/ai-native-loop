@@ -14,6 +14,8 @@
   用真实任务链路对 Skill 做的实际前测。
 - `docs/release-readiness.md`
   面向 GitHub 开源发布的完成度检查。
+- `docs/cases/case-01-self-bootstrap.md`
+  首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
 - `ai-native-loop-delivery.md`
   设计规格与完整 Skill 方案。
 
