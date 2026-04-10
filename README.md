@@ -1,5 +1,7 @@
 # ai-native-loop
 
+Current version: `v0.1.0`
+
 `ai-native-loop` 是一个面向广义知识工作的底层协议型 Skill。
 
 它不把 AI 当作单点工具，而把 AI 当作工作环境，帮助用户持续重写输入、执行、反馈与再输入闭环。它适用于编码、研究、写作、产品思考、决策推进、Agent 协作与多轮任务推进。
@@ -89,6 +91,10 @@ Skill 会：
   首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
 - `docs/iteration-assessment-against-web-access.md`
   对标 `web-access` 后形成的迭代评估与优先级清单。
+- `docs/trigger-examples.md`
+  触发与不触发样例库，帮助判断何时该用这个 Skill。
+- `CHANGELOG.md`
+  版本记录与发布说明。
 - `ai-native-loop-delivery.md`
   设计规格与完整 Skill 方案。
 
@@ -114,6 +120,8 @@ Skill 会：
 
 ## 当前发布状态
 
+当前版本：`v0.1.0`
+
 当前版本已经具备：
 
 - 完整 `SKILL.md`
@@ -132,7 +140,7 @@ Skill 会：
 - 2 到 3 个更完整的外部真实案例样本
 - 不同领域下的触发边界对照
 - 长周期使用后的版本迭代记录
-- 版本号与 changelog
+- 版本号与 changelog（已补齐首版）
 
 ## License
 

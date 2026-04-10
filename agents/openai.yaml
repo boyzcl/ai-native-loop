@@ -1,7 +1,7 @@
 interface:
   display_name: "AI Native Loop"
-  short_description: "Turn work into an ai-native iteration loop"
-  default_prompt: "Use $ai-native-loop to restructure this task into a clearer input, execution, feedback, and re-input loop."
+  short_description: "AI-native workflow loop for knowledge work"
+  default_prompt: "Use $ai-native-loop to turn this task into a clearer input, execution, feedback, and re-input workflow loop."
 
 policy:
   allow_implicit_invocation: true

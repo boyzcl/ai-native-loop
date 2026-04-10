@@ -3,6 +3,7 @@ name: ai-native-loop
 description: 当用户想把 ai 当作工作环境来重写输入、执行、反馈与再输入循环，或需要把零散任务、上下文、输出和反馈整理成可持续推进的 ai native 工作流时使用。适用于编码、研究、写作、产品思考、决策推进、agent 协作与多轮任务推进。
 metadata:
   short-description: 用 ai native 闭环重写知识工作
+  version: "0.1.0"
 ---
 
 # ai-native-loop
