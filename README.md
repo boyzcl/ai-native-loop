@@ -4,10 +4,81 @@
 
 它不把 AI 当作单点工具，而把 AI 当作工作环境，帮助用户持续重写输入、执行、反馈与再输入闭环。它适用于编码、研究、写作、产品思考、决策推进、Agent 协作与多轮任务推进。
 
+## Why It Exists
+
+大多数人已经会“用 AI”，但还没有形成稳定的 AI native 工作循环。
+
+这个 Skill 的目标不是替你完成某一个任务，而是帮助你持续优化：
+
+- 任务如何表达
+- 人机如何分工
+- 输出如何转成反馈
+- 反馈如何进入下一轮输入
+
+## Quick Start
+
+### 安装到 Codex
+
+```bash
+git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
+```
+
+如果你已经下载了仓库，也可以直接复制整个仓库目录到 `~/.codex/skills/ai-native-loop`。
+
+### 第一次怎么触发
+
+直接这样说就可以：
+
+- `用 $ai-native-loop 帮我把这个任务整理成更适合 AI 协作的闭环。`
+- `用 $ai-native-loop 看看我现在卡住的根因是在输入、执行还是反馈。`
+- `用 $ai-native-loop 帮我把这轮结果折叠成下一轮输入。`
+
+### 三个典型请求
+
+- `我在写一个复杂功能，需求、报错和历史尝试都很乱。用 $ai-native-loop 帮我整理。`
+- `我做了一轮研究，但不知道哪些反馈值得进入下一轮。用 $ai-native-loop 帮我归因。`
+- `我已经有 AI 输出了，但它还不能直接用。用 $ai-native-loop 帮我改写下一轮输入。`
+
+## 这个 Skill 会怎么介入
+
+### 轻介入
+
+适合：你已经知道要做什么，只是表达不够适合 AI。
+
+Skill 会：
+
+- 重写当前请求
+- 补关键缺失字段
+- 给你更好的下一检查点
+
+### 中介入
+
+适合：你已经在推进，但任务跨材料、质量不稳、反馈吸收困难。
+
+Skill 会：
+
+- 重建任务包
+- 明确人机分工
+- 定义检查点和再输入结构
+
+### 强介入
+
+适合：任务高风险、反复失败、跨轮或多 Agent 协作依赖重。
+
+Skill 会：
+
+- 暂停过早求答案
+- 重建目标、边界、交付物和验证路径
+- 先修工作系统，再恢复执行
+
 ## 仓库内容
 
-- `skill/`
-  可直接安装和使用的 Skill 本体。
+- `SKILL.md`
+  Skill 主体说明。
+- `references/`
+  按需加载的协议、模板和参考文件。
+- `agents/openai.yaml`
+  UI 与调用元数据。
 - `docs/self-evaluation.md`
   使用 `ai-native-loop` 对当前 Skill 做的完成度与质量评估。
 - `docs/forward-test.md`
@@ -32,16 +103,6 @@
 
 它的核心目标是帮助用户形成稳定、可迁移、可迭代的 AI native 工作方式。
 
-## 安装方式
-
-把 `skill/` 目录复制到你的 Codex skills 目录中，例如：
-
-```bash
-cp -R skill ~/.codex/skills/ai-native-loop
-```
-
-如果目录名不是 `ai-native-loop`，请改成该名称，以匹配 Skill frontmatter 中的 `name`。
-
 ## 核心能力
 
 - 把模糊任务重写为 AI-ready task packet
@@ -64,13 +125,15 @@ cp -R skill ~/.codex/skills/ai-native-loop
 - 再输入模板
 - 多 Agent 交接模板
 - GitHub 开源仓库级文档
+- 首个正式案例
 
 仍建议继续补充：
 
-- 3 到 5 个更完整的真实案例样本
+- 2 到 3 个更完整的外部真实案例样本
 - 不同领域下的触发边界对照
 - 长周期使用后的版本迭代记录
+- 版本号与 changelog
 
-## 许可证
+## License
 
 本仓库当前采用 MIT License。

@@ -16,8 +16,8 @@
 
 ### artifacts
 
-- `skill/SKILL.md`
-- `skill/references/*.md`
+- `SKILL.md`
+- `references/*.md`
 - `ai-native-loop-delivery.md`
 
 ### constraints

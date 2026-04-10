@@ -131,7 +131,7 @@
 
 对应关键文件：
 
-- `skill/SKILL.md`
+- `SKILL.md`
 - `ai-native-loop-delivery.md`
 - `docs/self-evaluation.md`
 - `docs/forward-test.md`
