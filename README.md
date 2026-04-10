@@ -16,6 +16,8 @@
   面向 GitHub 开源发布的完成度检查。
 - `docs/cases/case-01-self-bootstrap.md`
   首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
+- `docs/iteration-assessment-against-web-access.md`
+  对标 `web-access` 后形成的迭代评估与优先级清单。
 - `ai-native-loop-delivery.md`
   设计规格与完整 Skill 方案。
 
