@@ -9,10 +9,15 @@ All notable changes to this project will be documented in this file.
 - v0.2.0 iteration execution plan documenting the next engineering phase for the skill
 - Core operating primitives for Diagnosis Card, Task Packet, Feedback Attribution Card, and Re-input Packet
 - Failure modes reference covering common loop breakdowns and correction rules
-- Pattern library with initial self-bootstrap and research-to-report patterns
+- Multi-agent decomposition rules covering split / don't-split boundaries, child-agent minimum packets, and handoff artifacts
+- Experience compounding loop reference plus field-note and pattern-intake templates for lower-friction experience capture
+- Pattern library with self-bootstrap, research-to-report, decision-structuring, and multi-agent decomposition patterns
+- Multi-agent decomposition pattern and a fixed expansion benchmark scenario for the collaboration track
+- Decision-structuring field note to pattern/failure/benchmark demonstration chain
 - Benchmark matrix defining fixed scenarios and pass criteria for future evaluation
 - Executed 4 retrospective benchmark cases across research, writing, product, and decision workflows with a 4.70 average score
 - Case 02 documenting how the skill transfers to a research-and-writing workflow via the Rosie mRNA investigation chain
+- Drafted `v0.2.0` release notes to explain the version in failure-driven rather than file-driven terms
 
 ## v0.1.0 - 2026-04-11
 

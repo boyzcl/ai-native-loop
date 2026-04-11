@@ -90,3 +90,9 @@
 通过。
 
 这证明 `ai-native-loop` 在决策整理场景里不是替用户拍板，而是重写信息结构，让决策真正可做。
+
+## Promotion Trace
+
+- Source field note: [field-note-01-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-notes/field-note-01-decision-structuring-skincare.md)
+- Promoted pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
+- Related failure mode: [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)

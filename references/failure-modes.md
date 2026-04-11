@@ -203,6 +203,31 @@
 - 把案例压成 pattern 文件
 - 每篇 pattern 必须明确可迁移规律
 
+## 13. 把研究结构直接当成决策结构
+
+症状：
+
+- 输出讲了很多机制、成分、事实或背景
+- 但用户仍然无法做出选择
+- AI 容易用“强推荐”掩盖真正的决策边界
+
+根因：
+
+- 研究层没有被改写成决策层
+- 任务对象仍然是“解释”，而不是“帮助判断”
+
+纠偏：
+
+- 先重写决策对象、选项边界与成功信号
+- 用 `Task Packet` 明确决策分层，而不是继续扩写研究综述
+- 用 `Re-input Packet` 把研究框架折叠成选项、权衡和边界
+
+示范链：
+
+- Field note: [field-note-01-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-notes/field-note-01-decision-structuring-skincare.md)
+- Pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
+- Benchmark: [benchmark-04-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
+
 ## Fast Triage Rule
 
 出现问题时，优先按这个顺序排查：

@@ -27,10 +27,11 @@ Current iteration track: `v0.2.0` execution in progress
 - 补失败模式与纠偏层
 - 建立可复用的模式库
 - 建立 benchmark 骨架，避免继续凭感觉迭代
+- 开始补多 Agent 规则层与经验沉淀 intake 层
 
-## v0.2.0 Phase 1 Deliverables
+## v0.2.0 Current Execution Artifacts
 
-这一阶段已经落地的关键交付：
+当前主线上已经落地的关键交付：
 
 - [iteration-execution-plan-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/iteration-execution-plan-v0.2.0.md)
   这一轮迭代的执行方案与阶段边界。
@@ -42,6 +43,14 @@ Current iteration track: `v0.2.0` execution in progress
   模式库入口与模式编写规则。
 - [benchmark-matrix.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmark-matrix.md)
   后续固定测例和通过标准。
+- [multi-agent-decomposition.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/multi-agent-decomposition.md)
+  多 Agent 的拆分边界、最小输入包与回收规则。
+- [experience-compounding-loop.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/experience-compounding-loop.md)
+  经验如何从任务回收物进入 pattern、failure mode、benchmark。
+- [field-note-template.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-note-template.md)
+  显著任务结束后的最小经验 intake 模板。
+- [release-notes-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/release-notes-v0.2.0.md)
+  `v0.2.0` 的发布说明草案与版本判断。
 
 ## Quick Start
 
@@ -111,6 +120,10 @@ Skill 会：
   四个核心工件与最小完备动作集。
 - `references/failure-modes.md`
   高频失败模式与纠偏规则。
+- `references/multi-agent-decomposition.md`
+  多 Agent 分治规则层，而不只是交接模板。
+- `references/experience-compounding-loop.md`
+  经验从任务回收到版本决策的复利回路。
 - `patterns/`
   从真实案例提炼出的可迁移模式库。
 - `docs/iteration-execution-plan-v0.2.0.md`
@@ -119,6 +132,14 @@ Skill 会：
   固定测例矩阵与通过标准。
 - `docs/benchmark-results-v0.2.0.md`
   4 个真实测例的汇总结果与评分。
+- `docs/field-notes/`
+  真实任务的最小回收物，用于演示和驱动经验升级。
+- `docs/benchmarks/benchmark-05-multi-agent-decomposition.md`
+  多 Agent 协作的固定扩展 benchmark 场景。
+- `docs/field-note-template.md`
+  任务结束后最低成本的经验回收模板。
+- `docs/release-notes-v0.2.0.md`
+  `v0.2.0` 的 release notes 草案。
 - `docs/self-evaluation.md`
   使用 `ai-native-loop` 对当前 Skill 做的完成度与质量评估。
 - `docs/forward-test.md`
@@ -160,9 +181,11 @@ Skill 会：
 
 ## 当前发布状态
 
-当前版本：`v0.1.0`
+当前正式版本标签：`v0.1.0`
 
-当前版本已经具备：
+当前主线状态：`v0.2.0` draft / execution in progress
+
+当前主线已经具备：
 
 - 完整 `SKILL.md`
 - 动态介入框架
@@ -171,6 +194,8 @@ Skill 会：
 - 反馈归因框架
 - 高频失败模式库
 - 模式沉淀目录
+- 多 Agent 规则层
+- 经验沉淀 intake 层
 - 多场景迁移参考
 - AI-first 输入模板
 - 再输入模板
@@ -185,7 +210,11 @@ Skill 会：
 - 更多外部真实案例样本
 - 不同领域下的触发边界对照
 - 长周期使用后的版本迭代记录
-- `v0.2.0` release notes
+- 多 Agent benchmark 实测结果
+
+当前 `v0.2.0` 版本说明草案见：
+
+- [release-notes-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/release-notes-v0.2.0.md)
 
 ## License
 

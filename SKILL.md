@@ -51,6 +51,10 @@ metadata:
 6. 收敛为标准工件
    - 轻介入默认至少落成 Diagnosis Card 和 Task Packet。
    - 中介入以上尽量补齐 Feedback Attribution Card 与 Re-input Packet。
+7. 保留最小回收物
+   - 对中介入以上任务，默认至少留下一个最小 field note。
+   - 记录场景、卡点、介入、有效工件、剩余风险和下一轮输入。
+   - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
 
 ## 动态介入等级
 
@@ -151,6 +155,8 @@ metadata:
 - [information-restructuring.md](references/information-restructuring.md)：把混乱上下文重组为 ai 可执行结构的方法。
 - [feedback-attribution.md](references/feedback-attribution.md)：反馈识别、失败归因与下一步改写。
 - [failure-modes.md](references/failure-modes.md)：高频失败模式、典型症状与纠偏动作。
+- [multi-agent-decomposition.md](references/multi-agent-decomposition.md)：多 agent 何时该拆、何时不该拆，以及如何定义最小输入包与回收物。
+- [experience-compounding-loop.md](references/experience-compounding-loop.md)：经验如何从 field note 进入 pattern、failure mode、benchmark 与版本迭代。
 - [transfer-patterns.md](references/transfer-patterns.md)：同一协议如何迁移到不同知识工作。
 - [growth-ladder.md](references/growth-ladder.md)：用户成长阶段与支架收缩方式。
 - [ai-first-input-template.md](references/ai-first-input-template.md)：AI-first 输入重组模板。
@@ -159,6 +165,7 @@ metadata:
 - [agent-handoff-template.md](references/agent-handoff-template.md)：多 agent 与多角色交接模板。
 - [reinput-template.md](references/reinput-template.md)：收束本轮并开启下一轮的模板。
 - [patterns/README.md](patterns/README.md)：从真实案例压缩出的可迁移模式库。
+- [docs/field-note-template.md](docs/field-note-template.md)：显著任务结束后的最小经验 intake 模板。
 
 ## 行为边界
 

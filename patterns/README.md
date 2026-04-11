@@ -29,6 +29,15 @@
   用于“系统评估自己、修补自己、发布自己”的自举型任务。
 - `research-to-report.md`
   用于“研究调查 -> 中间沉淀 -> 最终成稿”的研究写作任务。
+- `decision-structuring.md`
+  用于“研究或信息已经很多，但还不能直接支持选择”的决策型任务。
+- `multi-agent-decomposition.md`
+  用于“一个复杂任务需要判断是否拆 agent，以及拆分后如何回收”的分治型任务。
+
+## Intake Utilities
+
+- `pattern-intake-template.md`
+  把 field note 压成 pattern 前的统一筛选模板。
 
 ## Authoring Rule
 

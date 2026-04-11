@@ -23,6 +23,7 @@
 | 写作表达 | 有想法、有素材，但无法成稿 | 直接写终稿导致结构漂移 | Diagnosis Card + Task Packet + Re-input Packet | 形成可继续扩写的稳定结构，且下一轮输入更清楚 |
 | 产品推进 | 需求、方案、发布准备散乱 | 多部件同时运动导致推进失真 | Diagnosis Card + Task Packet + Feedback Attribution Card | 明确当前轮目标、交付物和检查点 |
 | 决策整理 | 信息很多但不能形成判断 | 把价值判断错误外包给 AI | Diagnosis Card + Task Packet + Feedback Attribution Card | 选项、权衡和决策权边界清晰，不替用户做不可逆决定 |
+| 多 Agent 协作 | 一个总任务包含多个可分离工作流 | 拆分失当导致并行失真或结果不可回收 | Diagnosis Card + Task Packet + 子 agent 最小输入包 + handoff artifact + Re-input Packet | 明确拆与不拆边界，且主 agent 能稳定整合回收物 |
 
 ## Scoring Lens
 
@@ -43,7 +44,7 @@
 
 ## Success Bar For v0.2.0
 
-至少应达到：
+`v0.2.0` 核心通过标准至少应达到：
 
 - 4 个固定测例全部存在
 - 每个测例都有四段式记录
@@ -56,3 +57,4 @@
 - 4 个固定测例已补齐
 - 汇总结果见 [benchmark-results-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmark-results-v0.2.0.md)
 - 本轮回放式 benchmark 结果：平均分 `4.70`，`reinput_quality` 平均分 `4.63`，达到 `v0.2.0` 通过标准
+- 多 Agent 协作 benchmark 场景已建立，见 [benchmark-05-multi-agent-decomposition.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmarks/benchmark-05-multi-agent-decomposition.md)
