@@ -202,6 +202,10 @@ Skill 会：
   对标 `web-access` 后形成的迭代评估与优先级清单。
 - `docs/trigger-examples.md`
   触发与不触发样例库，帮助判断何时该用这个 Skill。
+- `docs/trigger-regression-suite.md`
+  给 Agent 用的触发回归测试集，用来检查 should-trigger / should-not-trigger 判断是否稳定。
+- `docs/skill-architecture.md`
+  解释这个 Skill 由哪些层组成、每层如何工作、为什么这些层有存在的必要。
 - `CHANGELOG.md`
   版本记录与发布说明。
 - `ai-native-loop-delivery.md`
