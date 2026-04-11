@@ -1,98 +1,68 @@
 # ai-native-loop
 
-Release truth: [release-manifest.md](docs/release-manifest.md)
+`ai-native-loop` 是一个工作协议层 Skill。
 
-Current public version: `v0.1.0`
+它解决的不是“再给我一个答案”，而是：
 
-Current iteration track: `v0.2.0` draft / validation hardening
+- 输入太乱，当前轮不知道该推进什么
+- AI 已经有输出，但反馈进不了下一轮
+- 任务跨阶段或多 Agent，结果很难回收和整合
 
-当前这一轮重点补的不是更多概念，而是三件更容易失真的基础设施：
+一句话说：
 
-- 版本单一事实源
-- baseline / pairwise 验证骨架
-- `medium` 以上任务默认 `Loop Recovery Block`
+> 当你真正卡住的是协作闭环，而不是单点答案时，用 `ai-native-loop`。
 
-`ai-native-loop` 是一个面向广义知识工作的底层协议型 Skill。
+## Release Status
 
-它不把 AI 当作单点工具，而把 AI 当作工作环境，帮助用户持续重写输入、执行、反馈与再输入闭环。它适用于编码、研究、写作、产品思考、决策推进、Agent 协作与多轮任务推进。
+- Release truth: [release-manifest.md](docs/release-manifest.md)
+- Current public version: `v0.1.0`
+- Current iteration track: `v0.2.0` draft / validation hardening
 
-## 30 秒自测
+## When To Use
 
-如果你现在卡住的不是“答案是什么”，而是下面这些问题之一，这个 Skill 基本值得触发：
+优先在下面这些情况使用：
 
-- 材料很多，但这一轮到底该推进什么并不清楚
-- AI 已经输出了内容，但你不知道哪些反馈该进入下一轮
-- 任务涉及多阶段或多 Agent，结果很难回收和整合
+- 需求、材料、历史尝试、报错混在一起，当前轮任务包不清楚
+- 已经有 AI 输出，但不知道该保留什么、丢弃什么、怎么进入下一轮
+- 你能感觉结果不对，但说不清错在哪，也不知道 prompt / protocol 该怎么改
+- 多角色或多 Agent 协作边界不清，回收物难整合
+- 同类问题已经重复至少两轮，但输入、分工或评估方式没有真正改写
 
-一次最小成功通常长这样：
+通常不要在下面这些情况使用：
 
-1. 原始混乱请求被压成 `Task Packet`
-2. 当前卡点被点名成 `Diagnosis Card`
-3. 这轮结束时得到下一轮更好的输入，而不是只得到一段答案
+- 单点事实查询
+- 翻译、改格式、改单个小项、机械执行
+- 目标、交付物和验收标准都很清楚，只差直接执行
+- 已有更窄、更强的领域 skill 足够解决
 
-如果你只是要一个窄而稳定的一次性答案，这个 Skill 通常不该触发。
+更完整的触发规则见 [SKILL.md](SKILL.md)、[trigger-examples.md](docs/trigger-examples.md) 和 [trigger-regression-suite.md](docs/trigger-regression-suite.md)。
 
-## Why It Exists
+## What It Produces
 
-大多数人已经会“用 AI”，但还没有形成稳定的 AI native 工作循环。
+这个 Skill 默认把介入收敛成一组固定工件，而不是泛建议：
 
-这个 Skill 的目标不是替你完成某一个任务，而是帮助你持续优化：
+- `Diagnosis Card`
+  - 当前卡在哪一环，为什么要用当前介入等级
+- `Task Packet`
+  - 把原始请求压成 AI / Agent 可执行的任务包
+- `Feedback Attribution Card`
+  - 把“结果不对”改写成可行动的反馈归因
+- `Re-input Packet`
+  - 把本轮结果折成下一轮更好的输入
+- `Loop Recovery Block`
+  - 对 `medium` 及以上任务，留下最小经验痕迹
 
-- 任务如何表达
-- 人机如何分工
-- 输出如何转成反馈
-- 反馈如何进入下一轮输入
-
-## v0.2.0 Focus
-
-这一轮迭代的重点，不是继续补概念，而是补执行层：
-
-- 把协议压成 4 个核心工件
-- 补失败模式与纠偏层
-- 建立可复用的模式库
-- 建立 benchmark 骨架，避免继续凭感觉迭代
-- 开始补多 Agent 规则层与经验沉淀 intake 层
-
-## v0.2.0 Current Execution Artifacts
-
-当前主线上已经落地的关键交付：
-
-- [release-manifest.md](docs/release-manifest.md)
-  仓库当前版本与发布状态的单一事实源。
-- [iteration-execution-plan-v0.2.0.md](docs/iteration-execution-plan-v0.2.0.md)
-  这一轮迭代的执行方案与阶段边界。
-- [core-operating-primitives.md](references/core-operating-primitives.md)
-  四个核心工件的定义、短版示例和介入映射。
-- [failure-modes.md](references/failure-modes.md)
-  高频失败模式、典型症状和纠偏动作。
-- [patterns/README.md](patterns/README.md)
-  模式库入口与模式编写规则。
-- [benchmark-matrix.md](docs/benchmark-matrix.md)
-  后续固定测例、baseline 对照与通过标准。
-- [evaluation-rubric.md](docs/evaluation-rubric.md)
-  统一评分标准，避免只靠自我感觉打分。
-- [experiment-log-template.md](docs/experiment-log-template.md)
-  假设驱动的实验记录模板。
-- [multi-agent-decomposition.md](references/multi-agent-decomposition.md)
-  多 Agent 的拆分边界、最小输入包与回收规则。
-- [experience-compounding-loop.md](references/experience-compounding-loop.md)
-  经验如何从任务回收物进入 pattern、failure mode、benchmark。
-- [field-note-template.md](docs/field-note-template.md)
-  显著任务结束后的最小经验 intake 模板。
-- [release-notes-v0.2.0.md](docs/release-notes-v0.2.0.md)
-  `v0.2.0` 的发布说明草案与版本判断。
+核心工件定义见 [core-operating-primitives.md](references/core-operating-primitives.md)。
 
 ## Quick Start
 
-### 安装到 Codex
+### Install
 
 ```bash
 git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
 ```
 
-如果你已经下载了仓库，也可以直接复制整个仓库目录到 `~/.codex/skills/ai-native-loop`。
-
-### 第一次怎么触发
+### Trigger
 
 直接这样说就可以：
 
@@ -100,7 +70,7 @@ git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native
 - `用 $ai-native-loop 看看我现在卡住的根因是在输入、执行还是反馈。`
 - `用 $ai-native-loop 帮我把这轮结果折叠成下一轮输入。`
 
-### 一个 before / after
+### Before / After
 
 Before：
 
@@ -110,166 +80,76 @@ After：
 
 > 用 `ai-native-loop` 先输出 `Diagnosis Card` 和 `Task Packet`：明确这轮目标、当前状态、约束、成功信号和下一检查点；如果判断为 `medium` 以上介入，再补反馈归因和下一轮输入。
 
-### 三个典型请求
+## How It Works
 
-- `我在写一个复杂功能，需求、报错和历史尝试都很乱。用 $ai-native-loop 帮我整理。`
-- `我做了一轮研究，但不知道哪些反馈值得进入下一轮。用 $ai-native-loop 帮我归因。`
-- `我已经有 AI 输出了，但它还不能直接用。用 $ai-native-loop 帮我改写下一轮输入。`
+这个 Skill 的核心不是固定流程，而是动态介入：
 
-## 这个 Skill 会怎么介入
+- `light`
+  - 上下文大体成熟，只缺更清晰的下一步
+- `medium`
+  - 任务跨材料或阶段，循环噪音较大
+- `strong`
+  - 任务高风险、反复失败、跨轮或多 Agent 协作依赖重
 
-### 轻介入
+它背后的工作循环是：
 
-适合：你已经知道要做什么，只是表达不够适合 AI。
+1. 诊断当前卡点
+2. 重写任务包
+3. 重新组织人机 / 多 Agent 分工
+4. 读取反馈，而不是只读取输出
+5. 改写下一轮输入
+6. 为经验复利用最小成本留下痕迹
 
-Skill 会：
+更完整的架构说明见 [skill-architecture.md](docs/skill-architecture.md)。
 
-- 重写当前请求
-- 补关键缺失字段
-- 给你更好的下一检查点
+## Why It Exists
 
-### 中介入
+大多数人已经会“用 AI”，但还没有形成稳定的 AI native 工作循环。
 
-适合：你已经在推进，但任务跨材料、质量不稳、反馈吸收困难。
+这个 Skill 的目标不是替你做完某一个任务，而是让你和 AI 的协作越来越：
 
-Skill 会：
+- 可执行
+- 可反馈
+- 可回收
+- 可迁移
 
-- 重建任务包
-- 明确人机分工
-- 定义检查点和再输入结构
-
-### 强介入
-
-适合：任务高风险、反复失败、跨轮或多 Agent 协作依赖重。
-
-Skill 会：
-
-- 暂停过早求答案
-- 重建目标、边界、交付物和验证路径
-- 先修工作系统，再恢复执行
-
-## 仓库内容
-
-- `SKILL.md`
-  Skill 主体说明。
-- `references/`
-  按需加载的协议、模板和参考文件。
-- `agents/openai.yaml`
-  UI 与调用元数据。
-- `references/core-operating-primitives.md`
-  四个核心工件与最小完备动作集。
-- `references/failure-modes.md`
-  高频失败模式与纠偏规则。
-- `references/multi-agent-decomposition.md`
-  多 Agent 分治规则层，而不只是交接模板。
-- `references/experience-compounding-loop.md`
-  经验从任务回收到版本决策的复利回路。
-- `patterns/`
-  从真实案例提炼出的可迁移模式库。
-- `docs/iteration-execution-plan-v0.2.0.md`
-  当前迭代回合的完整执行方案。
-- `docs/benchmark-matrix.md`
-  固定测例矩阵、baseline 对照与通过标准。
-- `docs/evaluation-rubric.md`
-  benchmark 与 before/after 对照的统一评分标准。
-- `docs/experiment-log-template.md`
-  假设驱动的迭代记录模板。
-- `docs/benchmark-results-v0.2.0.md`
-  4 个真实测例的汇总结果与评分。
-- `docs/benchmarks/runs/`
-  benchmark 的实际运行记录与准备稿目录。
-- `docs/field-notes/`
-  真实任务的最小回收物，用于演示和驱动经验升级。
-- `docs/benchmarks/benchmark-05-multi-agent-decomposition.md`
-  多 Agent 协作的固定扩展 benchmark 场景。
-- `docs/field-note-template.md`
-  任务结束后最低成本的经验回收模板。
-- `docs/release-notes-v0.2.0.md`
-  `v0.2.0` 的 release notes 草案。
-- `docs/self-evaluation.md`
-  使用 `ai-native-loop` 对当前 Skill 做的完成度与质量评估。
-- `docs/forward-test.md`
-  用真实任务链路对 Skill 做的实际前测。
-- `docs/release-readiness.md`
-  面向 GitHub 开源发布的完成度检查。
-- `docs/cases/case-01-self-bootstrap.md`
-  首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
-- `docs/cases/case-02-mrna-research-to-report.md`
-  外部案例：复杂研究任务如何被组织成调查、技术重建与最终成稿的闭环。
-- `docs/cases/case-03-audit-remediation-to-validation-hardening.md`
-  仓库治理案例：如何把审计反馈收口为版本单源、验证模板和默认回收路径修复。
-- `docs/iteration-assessment-against-web-access.md`
-  对标 `web-access` 后形成的迭代评估与优先级清单。
-- `docs/trigger-examples.md`
-  触发与不触发样例库，帮助判断何时该用这个 Skill。
-- `docs/trigger-regression-suite.md`
-  给 Agent 用的触发回归测试集，用来检查 should-trigger / should-not-trigger 判断是否稳定。
-- `docs/skill-architecture.md`
-  解释这个 Skill 由哪些层组成、每层如何工作、为什么这些层有存在的必要。
-- `CHANGELOG.md`
-  版本记录与发布说明。
-- `ai-native-loop-delivery.md`
-  设计规格与完整 Skill 方案。
-
-## Skill 定位
-
-这个 Skill 是一个工作协议层，而不是：
+它不是：
 
 - 单次任务顾问
 - 提示词美化器
 - 编程专用技巧包
 - 替用户思考的黑箱代理
 
-它的核心目标是帮助用户形成稳定、可迁移、可迭代的 AI native 工作方式。
+## Proof And Validation
 
-## 核心能力
+这个仓库已经不只是在写理念，也在补验证和经验复利层：
 
-- 把模糊任务重写为 AI-ready task packet
-- 在轻介入 / 中介入 / 强介入之间动态切换
-- 重组信息结构而不是只润色输入
-- 读取反馈并做根因归因
-- 把当前轮经验折叠进下一轮输入
-- 在不同知识工作之间迁移同一套工作协议
+- 版本与状态单一事实源： [release-manifest.md](docs/release-manifest.md)
+- Skill 结构图： [skill-architecture.md](docs/skill-architecture.md)
+- 触发边界与回归集： [trigger-examples.md](docs/trigger-examples.md), [trigger-regression-suite.md](docs/trigger-regression-suite.md)
+- benchmark 矩阵： [benchmark-matrix.md](docs/benchmark-matrix.md)
+- 统一评分标准： [evaluation-rubric.md](docs/evaluation-rubric.md)
+- 实验模板： [experiment-log-template.md](docs/experiment-log-template.md)
+- 当前 benchmark 汇总： [benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
+- 经验复利规则： [experience-compounding-loop.md](references/experience-compounding-loop.md)
 
-## 当前发布状态
+## Repo Map
 
-当前正式版本标签：`v0.1.0`
+如果你第一次看这个仓库，最值得先读的是这些文件：
 
-当前主线状态：`v0.2.0` draft / validation hardening
-
-当前主线已经具备：
-
-- 完整 `SKILL.md`
-- 动态介入框架
-- 工作循环协议文档
-- 四个核心工件定义
-- 反馈归因框架
-- 高频失败模式库
-- 模式沉淀目录
-- 多 Agent 规则层
-- 经验沉淀 intake 层
-- 多场景迁移参考
-- AI-first 输入模板
-- 再输入模板
-- 多 Agent 交接模板
-- benchmark 矩阵骨架
-- GitHub 开源仓库级文档
-- 三个正式案例
-
-仍建议继续补充：
-
-- baseline + pairwise benchmark 记录
-- 更多 live benchmark 记录
-- 更多外部真实案例样本
-- 不同领域下的触发边界对照
-- 长周期使用后的版本迭代记录
-- 多 Agent benchmark 实测结果
-
-当前 `v0.2.0` 版本说明草案见：
-
-- [release-notes-v0.2.0.md](docs/release-notes-v0.2.0.md)
-- [release-manifest.md](docs/release-manifest.md)
+- [SKILL.md](SKILL.md)
+  - Skill 主体与调用规则
+- [core-operating-primitives.md](references/core-operating-primitives.md)
+  - 四个核心工件与最小完备动作集
+- [skill-architecture.md](docs/skill-architecture.md)
+  - 这个 Skill 的结构图
+- [trigger-regression-suite.md](docs/trigger-regression-suite.md)
+  - 触发边界回归测试集
+- [experience-compounding-loop.md](references/experience-compounding-loop.md)
+  - 经验如何进入下一轮系统
+- [benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
+  - 当前验证结果与边界
 
 ## License
 
-本仓库当前采用 MIT License。
+MIT
