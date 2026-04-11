@@ -2,6 +2,8 @@
 
 Current version: `v0.1.0`
 
+Current iteration track: `v0.2.0` execution in progress
+
 `ai-native-loop` 是一个面向广义知识工作的底层协议型 Skill。
 
 它不把 AI 当作单点工具，而把 AI 当作工作环境，帮助用户持续重写输入、执行、反馈与再输入闭环。它适用于编码、研究、写作、产品思考、决策推进、Agent 协作与多轮任务推进。
@@ -16,6 +18,15 @@ Current version: `v0.1.0`
 - 人机如何分工
 - 输出如何转成反馈
 - 反馈如何进入下一轮输入
+
+## v0.2.0 Focus
+
+这一轮迭代的重点，不是继续补概念，而是补执行层：
+
+- 把协议压成 4 个核心工件
+- 补失败模式与纠偏层
+- 建立可复用的模式库
+- 建立 benchmark 骨架，避免继续凭感觉迭代
 
 ## Quick Start
 
@@ -81,6 +92,16 @@ Skill 会：
   按需加载的协议、模板和参考文件。
 - `agents/openai.yaml`
   UI 与调用元数据。
+- `references/core-operating-primitives.md`
+  四个核心工件与最小完备动作集。
+- `references/failure-modes.md`
+  高频失败模式与纠偏规则。
+- `patterns/`
+  从真实案例提炼出的可迁移模式库。
+- `docs/iteration-execution-plan-v0.2.0.md`
+  当前迭代回合的完整执行方案。
+- `docs/benchmark-matrix.md`
+  后续评估 Skill 效果的固定测例矩阵。
 - `docs/self-evaluation.md`
   使用 `ai-native-loop` 对当前 Skill 做的完成度与质量评估。
 - `docs/forward-test.md`
@@ -129,20 +150,25 @@ Skill 会：
 - 完整 `SKILL.md`
 - 动态介入框架
 - 工作循环协议文档
+- 四个核心工件定义
 - 反馈归因框架
+- 高频失败模式库
+- 模式沉淀目录
 - 多场景迁移参考
 - AI-first 输入模板
 - 再输入模板
 - 多 Agent 交接模板
+- benchmark 矩阵骨架
 - GitHub 开源仓库级文档
-- 首个正式案例
+- 两个正式案例
 
 仍建议继续补充：
 
-- 2 到 3 个更完整的外部真实案例样本
+- 4 个 benchmark 场景的实测记录
+- 更多外部真实案例样本
 - 不同领域下的触发边界对照
 - 长周期使用后的版本迭代记录
-- 版本号与 changelog（已补齐首版）
+- `v0.2.0` release notes
 
 ## License
 

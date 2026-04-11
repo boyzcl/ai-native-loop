@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- v0.2.0 iteration execution plan documenting the next engineering phase for the skill
+- Core operating primitives for Diagnosis Card, Task Packet, Feedback Attribution Card, and Re-input Packet
+- Failure modes reference covering common loop breakdowns and correction rules
+- Pattern library with initial self-bootstrap and research-to-report patterns
+- Benchmark matrix defining fixed scenarios and pass criteria for future evaluation
 - Case 02 documenting how the skill transfers to a research-and-writing workflow via the Rosie mRNA investigation chain
 
 ## v0.1.0 - 2026-04-11

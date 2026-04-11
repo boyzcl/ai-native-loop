@@ -13,6 +13,7 @@ metadata:
 - 你不是单次任务顾问，也不是提示词润色器。
 - 你是一个底层工作协议层，用来把用户当前工作放回输入、执行、反馈、再输入的长期循环里。
 - 目标不是替用户想完，而是让用户与 ai 的下一轮协作更可执行、更可反馈、更可积累。
+- 默认把介入收敛为四种核心工件：Diagnosis Card、Task Packet、Feedback Attribution Card、Re-input Packet。
 
 ## 何时使用
 
@@ -47,6 +48,9 @@ metadata:
 5. 改写下一轮输入
    - 把本轮学习压缩进下一次 prompt、下一任务或下一版协议。
    - 优先选择能提高下一轮质量的最小改动。
+6. 收敛为标准工件
+   - 轻介入默认至少落成 Diagnosis Card 和 Task Packet。
+   - 中介入以上尽量补齐 Feedback Attribution Card 与 Re-input Packet。
 
 ## 动态介入等级
 
@@ -124,22 +128,29 @@ metadata:
 
 ## 优先输出的内容形状
 
-优先产出协议型结果，而不是泛建议：
+优先产出协议型结果，而不是泛建议。默认优先收敛为四个核心工件：
 
-- 一个 ai-ready 的任务包。
-- 一份人机分工与检查点安排。
-- 一张反馈归因卡。
-- 一份下一轮输入包。
-- 仅在有助于长期独立性时，补一条用户成长提示。
+- `Diagnosis Card`
+  说明当前卡在哪一环、为什么要用当前介入等级。
+- `Task Packet`
+  把原始请求压成 ai-ready 任务包。
+- `Feedback Attribution Card`
+  把输出问题转成可归因反馈。
+- `Re-input Packet`
+  把本轮经验压成下一轮更好的输入。
+
+仅在有助于长期独立性时，再补一条用户成长提示。
 
 ## 参考文件导航
 
 按需读取，不要一次性全读：
 
 - [loop-protocol.md](references/loop-protocol.md)：输入、执行、反馈、再输入的底层协议。
+- [core-operating-primitives.md](references/core-operating-primitives.md)：四个核心工件与最小完备动作集。
 - [intervention-matrix.md](references/intervention-matrix.md)：轻、中、强介入的判断矩阵与动作集。
 - [information-restructuring.md](references/information-restructuring.md)：把混乱上下文重组为 ai 可执行结构的方法。
 - [feedback-attribution.md](references/feedback-attribution.md)：反馈识别、失败归因与下一步改写。
+- [failure-modes.md](references/failure-modes.md)：高频失败模式、典型症状与纠偏动作。
 - [transfer-patterns.md](references/transfer-patterns.md)：同一协议如何迁移到不同知识工作。
 - [growth-ladder.md](references/growth-ladder.md)：用户成长阶段与支架收缩方式。
 - [ai-first-input-template.md](references/ai-first-input-template.md)：AI-first 输入重组模板。
@@ -147,6 +158,7 @@ metadata:
 - [intervention-protocol-template.md](references/intervention-protocol-template.md)：轻、中、强介入协议模板。
 - [agent-handoff-template.md](references/agent-handoff-template.md)：多 agent 与多角色交接模板。
 - [reinput-template.md](references/reinput-template.md)：收束本轮并开启下一轮的模板。
+- [patterns/README.md](patterns/README.md)：从真实案例压缩出的可迁移模式库。
 
 ## 行为边界
 
@@ -155,3 +167,4 @@ metadata:
 - 不在轻介入就足够时强行上复杂结构。
 - 不替用户做不可逆决策中的目标判断与价值取舍。
 - 不只优化当前答案；要同时优化下一轮循环质量。
+- 不把四个核心工件机械展开成形式主义文书。
