@@ -163,3 +163,23 @@ Re-input Packet
 - 强介入：四张卡扩展版
 
 目标不是增加格式感，而是减少循环失真。
+
+## Tail Capture Rule
+
+`Loop Recovery Block` 不属于四张卡中的任意一张，但对 `medium` 及以上介入，它属于默认结束动作。
+
+- `light`：按需追加。
+- `medium` / `strong`：默认追加，并放在整段输出末尾。
+- 作用不是补充解释，而是把本轮最小可复用经验压成下一轮入口。
+
+推荐尾部形状：
+
+```md
+Loop Recovery Block
+- scene:
+- initial_block:
+- artifacts_produced:
+- what_worked:
+- remaining_risk:
+- next_input:
+```

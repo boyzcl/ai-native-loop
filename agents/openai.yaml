@@ -1,7 +1,7 @@
 interface:
   display_name: "AI Native Loop"
   short_description: "Use when the blocker is a broken collaboration loop, not a missing one-shot answer"
-  default_prompt: "Use $ai-native-loop when the user explicitly asks for it, or when the real blocker is messy input, drifting execution, unusable output, broken feedback absorption, or unclear next input. Otherwise do not invoke it for one-shot answers. Diagnose the loop, build a task packet, keep decision boundaries clear, and for medium-plus tasks leave a recovery block for the next round."
+  default_prompt: "Use $ai-native-loop when the user explicitly asks for it, or when the real blocker is messy input, drifting execution, unusable output, broken feedback absorption, or unclear next input. Otherwise do not invoke it for one-shot answers. Diagnose the loop, build a task packet, keep decision boundaries clear, and for medium-plus tasks end the response with a recovery block for the next round."
 
 policy:
   allow_implicit_invocation: true

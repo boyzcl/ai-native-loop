@@ -47,6 +47,16 @@
 
 这个回收块的目标不是完整复盘，而是保证后续还看得见这轮真正发生了什么。
 
+## End-Of-Response Capture Rule
+
+为了把经验沉淀从“作者记得做”变成“系统默认做”，当前阶段统一采用下面的结束规则：
+
+- `light`：可选追加 `Loop Recovery Block`。
+- `medium`：默认必须在本轮主输出末尾追加 `Loop Recovery Block`。
+- `strong`：默认必须在本轮主输出末尾追加 `Loop Recovery Block`，且字段不要空转。
+- recovery block 不替代四个核心工件；它负责收尾，不负责展开分析。
+- 如果没有尾部 recovery block，本轮只能算完成了任务推进，不能算完成了经验 capture。
+
 ## Minimum Field Note
 
 当某个 recovery block 值得继续升级时，再扩成 field note。每次显著任务结束后，field note 最少应记录：
@@ -73,6 +83,17 @@
 ## Triage Rules
 
 记录完 field note 后，按下面规则分流。
+
+## Promotion Gate Checklist
+
+看到 recovery block 后，先用最小清单判断是否值得升级为 field note。
+
+- 是否暴露了一个重复出现的失败模式？
+- 是否形成了一个可迁移到其他任务的做法？
+- 是否改变了后续的触发、分工或评估判断？
+- 是否值得进入 benchmark、pattern 或 failure mode？
+
+满足任意两项，再优先升级为 field note；否则先保留 recovery block。
 
 ### Promote To Pattern
 

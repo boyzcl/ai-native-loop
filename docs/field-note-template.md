@@ -24,6 +24,18 @@ Loop Recovery Block
 
 - 这是默认回收块，不是完整 field note
 - 先求低摩擦留下痕迹，再决定是否继续提升
+- 对 `medium` 及以上介入，默认把它放在本轮输出末尾
+
+## Promotion Checklist
+
+决定是否从 recovery block 升级成 field note 前，先检查：
+
+- 这轮是否暴露了重复失败或新失败模式？
+- 这轮是否形成了可迁移的做法？
+- 这轮是否改变了之后的触发、分工或评估方式？
+- 这轮是否值得进入 `pattern` / `failure_mode` / `benchmark`？
+
+至少命中两项，再优先升级为完整 field note。
 
 ## Template
 

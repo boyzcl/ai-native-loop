@@ -108,6 +108,7 @@ metadata:
 7. 保留最小回收物
    - 对 `medium` 及以上任务，默认输出一个 `Loop Recovery Block`。
    - 最少记录：`scene`、`initial_block`、`artifacts_produced`、`what_worked`、`remaining_risk`、`next_input`。
+   - 这个回收块默认放在本轮主输出的末尾，作为最后一个协议块，而不是散落在正文里。
    - 只有当样本值得沉淀时，再把 recovery block 扩成 field note。
    - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
 
@@ -217,8 +218,18 @@ Loop Recovery Block
 使用规则：
 
 - 轻介入通常不强制输出这一块。
-- 中介入以上默认输出短版 recovery block，再决定是否升级为完整 field note。
+- 中介入以上默认输出短版 recovery block，并把它放在本轮输出末尾，再决定是否升级为完整 field note。
 - 如果任务没有留下 recovery block，就不应轻易声称“这轮经验已经进入系统”。
+
+## 输出尾部规则
+
+把 `Loop Recovery Block` 当作默认的结束回收动作，而不是可选附言。
+
+- `light`：仅在这一轮明显暴露了可复用经验、失败模式或下一轮改写价值时追加。
+- `medium`：默认必须追加在主输出末尾。
+- `strong`：默认必须追加在主输出末尾，且字段尽量写实，不要省略成口号。
+- 如果已经输出了四个核心工件，`Loop Recovery Block` 仍然应作为最后一个块单独保留。
+- 如果本轮没有明确的 `next_input`，说明闭环还没真正收住，不应直接结束。
 
 ## 参考文件导航
 

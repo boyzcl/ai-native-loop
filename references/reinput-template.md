@@ -27,3 +27,11 @@
 - 不要重复整段背景，优先写变化。
 - 一次只改变最影响质量的 1 到 2 个点。
 - 如果问题根本不在模型，而在目标或约束，要先改目标或约束。
+
+## Output Tail Rule
+
+如果这份 `Re-input Packet` 是本轮主输出的一部分：
+
+- `medium` 及以上介入，默认在整段输出末尾再补一个 `Loop Recovery Block`。
+- `next-ask` 应尽量能直接进入 `Loop Recovery Block` 的 `next_input`。
+- 不要把 recovery 信息散写在解释段落里。

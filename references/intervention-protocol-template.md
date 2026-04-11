@@ -29,6 +29,10 @@
 
 ## next-reinput
 - 下一轮应如何改写输入：
+
+## output-tail
+- 是否需要 `Loop Recovery Block`：yes / no
+- 如果是 `medium` / `heavy`，默认 yes，并放在输出末尾
 ```
 
 ## 使用原则
@@ -36,3 +40,4 @@
 - `light` 只做局部矫正，不重建整个系统。
 - `medium` 重点修循环稳定性。
 - `heavy` 先修系统，再恢复生产。
+- `medium` 与 `heavy` 的最终输出，默认以 `Loop Recovery Block` 收尾。

@@ -50,7 +50,7 @@
 - `Re-input Packet`
   - 把本轮结果折成下一轮更好的输入
 - `Loop Recovery Block`
-  - 对 `medium` 及以上任务，留下最小经验痕迹
+  - 对 `medium` 及以上任务，作为输出末尾的默认回收块留下最小经验痕迹
 
 核心工件定义见 [core-operating-primitives.md](references/core-operating-primitives.md)。
 
@@ -79,6 +79,10 @@ Before：
 After：
 
 > 用 `ai-native-loop` 先输出 `Diagnosis Card` 和 `Task Packet`：明确这轮目标、当前状态、约束、成功信号和下一检查点；如果判断为 `medium` 以上介入，再补反馈归因和下一轮输入。
+
+默认结束动作：
+
+> 对 `medium` 及以上介入，主输出最后默认追加一个 `Loop Recovery Block`，把这轮最小可复用经验收住。
 
 ## How It Works
 
