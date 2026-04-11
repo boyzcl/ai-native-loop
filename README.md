@@ -28,6 +28,21 @@ Current iteration track: `v0.2.0` execution in progress
 - 建立可复用的模式库
 - 建立 benchmark 骨架，避免继续凭感觉迭代
 
+## v0.2.0 Phase 1 Deliverables
+
+这一阶段已经落地的关键交付：
+
+- [iteration-execution-plan-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/iteration-execution-plan-v0.2.0.md)
+  这一轮迭代的执行方案与阶段边界。
+- [core-operating-primitives.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/core-operating-primitives.md)
+  四个核心工件的定义、短版示例和介入映射。
+- [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)
+  高频失败模式、典型症状和纠偏动作。
+- [patterns/README.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/README.md)
+  模式库入口与模式编写规则。
+- [benchmark-matrix.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmark-matrix.md)
+  后续固定测例和通过标准。
+
 ## Quick Start
 
 ### 安装到 Codex
