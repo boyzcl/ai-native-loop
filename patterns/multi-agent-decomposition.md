@@ -54,3 +54,8 @@
 核心迁移规律：
 
 > 多 Agent 的价值不在“更多并行”，而在“主 agent 保留决策，子 agent 只承担边界清楚的推进工作”。
+
+## Source Trace
+
+- Related benchmark: [benchmark-05-multi-agent-decomposition.md](../docs/benchmarks/benchmark-05-multi-agent-decomposition.md)
+- No-split field note: [field-note-03-multi-agent-no-split-audit-remediation.md](../docs/field-notes/field-note-03-multi-agent-no-split-audit-remediation.md)

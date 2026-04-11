@@ -4,10 +4,12 @@
 
 - Category: 产品推进
 - Source materials:
-  - [CODEX_PROXY_FIX_IMPLEMENTATION_BLUEPRINT.md](/Users/boyzcl/Documents/A/存量项目/proxy%20launch%20codex/CODEX_PROXY_FIX_IMPLEMENTATION_BLUEPRINT.md)
-  - [RELEASE_READINESS_PLAN.md](/Users/boyzcl/Documents/A/存量项目/proxy%20launch%20codex/RELEASE_READINESS_PLAN.md)
-  - [RELEASE_NOTES_v0.1.0-alpha.1.md](/Users/boyzcl/Documents/A/存量项目/proxy%20launch%20codex/RELEASE_NOTES_v0.1.0-alpha.1.md)
-  - [README.md](/Users/boyzcl/Documents/A/存量项目/proxy%20launch%20codex/README.md)
+  - `CODEX_PROXY_FIX_IMPLEMENTATION_BLUEPRINT.md`
+  - `RELEASE_READINESS_PLAN.md`
+  - `RELEASE_NOTES_v0.1.0-alpha.1.md`
+  - `README.md`
+- Note:
+  - 这些源材料保存在仓库外的私有工作目录中，因此这里不提供仓库内跳转链接。
 
 ## Original Request
 

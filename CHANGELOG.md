@@ -6,6 +6,18 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Release manifest as the canonical source of truth for current version and track state
+- Evaluation rubric and experiment log template for baseline and pairwise validation
+- Default loop recovery block to lower-friction experience capture for medium-plus interventions
+- README smoke test and before/after trigger example for faster first-run adoption
+
+### Changed
+
+- Benchmark matrix now requires baseline comparison and rubric-driven scoring
+- Project status memo is no longer intended to be the live source of version truth
+
+### Previously Added
+
 - v0.2.0 iteration execution plan documenting the next engineering phase for the skill
 - Core operating primitives for Diagnosis Card, Task Packet, Feedback Attribution Card, and Re-input Packet
 - Failure modes reference covering common loop breakdowns and correction rules

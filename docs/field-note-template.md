@@ -6,6 +6,25 @@
 
 只记录后续能复用的字段，不记录所有过程细节。
 
+在 `medium` 及以上介入里，默认先保留一个更短的 `Loop Recovery Block`。只有当样本值得进入经验系统时，再扩写成完整 field note。
+
+## Loop Recovery Block
+
+```md
+Loop Recovery Block
+- scene:
+- initial_block:
+- artifacts_produced:
+- what_worked:
+- remaining_risk:
+- next_input:
+```
+
+使用原则：
+
+- 这是默认回收块，不是完整 field note
+- 先求低摩擦留下痕迹，再决定是否继续提升
+
 ## Template
 
 ```md
@@ -63,3 +82,5 @@
 - 一个做法看起来可以迁移
 - 一个场景值得进入 benchmark
 - 这轮输出虽然成功，但只有记录下来下次才不会重做
+
+如果只是想保留最小痕迹，而不是立刻升级经验资产，先写 `Loop Recovery Block` 即可。

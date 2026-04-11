@@ -52,8 +52,9 @@ metadata:
    - 轻介入默认至少落成 Diagnosis Card 和 Task Packet。
    - 中介入以上尽量补齐 Feedback Attribution Card 与 Re-input Packet。
 7. 保留最小回收物
-   - 对中介入以上任务，默认至少留下一个最小 field note。
-   - 记录场景、卡点、介入、有效工件、剩余风险和下一轮输入。
+   - 对 `medium` 及以上任务，默认输出一个 `Loop Recovery Block`。
+   - 最少记录：`scene`、`initial_block`、`artifacts_produced`、`what_worked`、`remaining_risk`、`next_input`。
+   - 只有当样本值得沉淀时，再把 recovery block 扩成 field note。
    - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
 
 ## 动态介入等级
@@ -145,6 +146,26 @@ metadata:
 
 仅在有助于长期独立性时，再补一条用户成长提示。
 
+## 默认回收块
+
+对 `medium` 及以上任务，除四个核心工件外，默认再补一个最小回收块：
+
+```md
+Loop Recovery Block
+- scene:
+- initial_block:
+- artifacts_produced:
+- what_worked:
+- remaining_risk:
+- next_input:
+```
+
+使用规则：
+
+- 轻介入通常不强制输出这一块。
+- 中介入以上默认输出短版 recovery block，再决定是否升级为完整 field note。
+- 如果任务没有留下 recovery block，就不应轻易声称“这轮经验已经进入系统”。
+
 ## 参考文件导航
 
 按需读取，不要一次性全读：
@@ -166,6 +187,8 @@ metadata:
 - [reinput-template.md](references/reinput-template.md)：收束本轮并开启下一轮的模板。
 - [patterns/README.md](patterns/README.md)：从真实案例压缩出的可迁移模式库。
 - [docs/field-note-template.md](docs/field-note-template.md)：显著任务结束后的最小经验 intake 模板。
+- [docs/evaluation-rubric.md](docs/evaluation-rubric.md)：benchmark 与实验统一评分标准。
+- [docs/experiment-log-template.md](docs/experiment-log-template.md)：假设驱动的迭代记录模板。
 
 ## 行为边界
 

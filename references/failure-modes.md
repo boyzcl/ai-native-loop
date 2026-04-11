@@ -224,9 +224,9 @@
 
 示范链：
 
-- Field note: [field-note-01-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-notes/field-note-01-decision-structuring-skincare.md)
-- Pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
-- Benchmark: [benchmark-04-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
+- Field note: [field-note-01-decision-structuring-skincare.md](../docs/field-notes/field-note-01-decision-structuring-skincare.md)
+- Pattern: [decision-structuring.md](../patterns/decision-structuring.md)
+- Benchmark: [benchmark-04-decision-structuring-skincare.md](../docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
 
 ## Fast Triage Rule
 

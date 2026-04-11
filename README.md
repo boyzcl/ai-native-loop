@@ -1,12 +1,36 @@
 # ai-native-loop
 
-Current version: `v0.1.0`
+Release truth: [release-manifest.md](docs/release-manifest.md)
 
-Current iteration track: `v0.2.0` execution in progress
+Current public version: `v0.1.0`
+
+Current iteration track: `v0.2.0` draft / validation hardening
+
+当前这一轮重点补的不是更多概念，而是三件更容易失真的基础设施：
+
+- 版本单一事实源
+- baseline / pairwise 验证骨架
+- `medium` 以上任务默认 `Loop Recovery Block`
 
 `ai-native-loop` 是一个面向广义知识工作的底层协议型 Skill。
 
 它不把 AI 当作单点工具，而把 AI 当作工作环境，帮助用户持续重写输入、执行、反馈与再输入闭环。它适用于编码、研究、写作、产品思考、决策推进、Agent 协作与多轮任务推进。
+
+## 30 秒自测
+
+如果你现在卡住的不是“答案是什么”，而是下面这些问题之一，这个 Skill 基本值得触发：
+
+- 材料很多，但这一轮到底该推进什么并不清楚
+- AI 已经输出了内容，但你不知道哪些反馈该进入下一轮
+- 任务涉及多阶段或多 Agent，结果很难回收和整合
+
+一次最小成功通常长这样：
+
+1. 原始混乱请求被压成 `Task Packet`
+2. 当前卡点被点名成 `Diagnosis Card`
+3. 这轮结束时得到下一轮更好的输入，而不是只得到一段答案
+
+如果你只是要一个窄而稳定的一次性答案，这个 Skill 通常不该触发。
 
 ## Why It Exists
 
@@ -33,23 +57,29 @@ Current iteration track: `v0.2.0` execution in progress
 
 当前主线上已经落地的关键交付：
 
-- [iteration-execution-plan-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/iteration-execution-plan-v0.2.0.md)
+- [release-manifest.md](docs/release-manifest.md)
+  仓库当前版本与发布状态的单一事实源。
+- [iteration-execution-plan-v0.2.0.md](docs/iteration-execution-plan-v0.2.0.md)
   这一轮迭代的执行方案与阶段边界。
-- [core-operating-primitives.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/core-operating-primitives.md)
+- [core-operating-primitives.md](references/core-operating-primitives.md)
   四个核心工件的定义、短版示例和介入映射。
-- [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)
+- [failure-modes.md](references/failure-modes.md)
   高频失败模式、典型症状和纠偏动作。
-- [patterns/README.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/README.md)
+- [patterns/README.md](patterns/README.md)
   模式库入口与模式编写规则。
-- [benchmark-matrix.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmark-matrix.md)
-  后续固定测例和通过标准。
-- [multi-agent-decomposition.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/multi-agent-decomposition.md)
+- [benchmark-matrix.md](docs/benchmark-matrix.md)
+  后续固定测例、baseline 对照与通过标准。
+- [evaluation-rubric.md](docs/evaluation-rubric.md)
+  统一评分标准，避免只靠自我感觉打分。
+- [experiment-log-template.md](docs/experiment-log-template.md)
+  假设驱动的实验记录模板。
+- [multi-agent-decomposition.md](references/multi-agent-decomposition.md)
   多 Agent 的拆分边界、最小输入包与回收规则。
-- [experience-compounding-loop.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/experience-compounding-loop.md)
+- [experience-compounding-loop.md](references/experience-compounding-loop.md)
   经验如何从任务回收物进入 pattern、failure mode、benchmark。
-- [field-note-template.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-note-template.md)
+- [field-note-template.md](docs/field-note-template.md)
   显著任务结束后的最小经验 intake 模板。
-- [release-notes-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/release-notes-v0.2.0.md)
+- [release-notes-v0.2.0.md](docs/release-notes-v0.2.0.md)
   `v0.2.0` 的发布说明草案与版本判断。
 
 ## Quick Start
@@ -69,6 +99,16 @@ git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native
 - `用 $ai-native-loop 帮我把这个任务整理成更适合 AI 协作的闭环。`
 - `用 $ai-native-loop 看看我现在卡住的根因是在输入、执行还是反馈。`
 - `用 $ai-native-loop 帮我把这轮结果折叠成下一轮输入。`
+
+### 一个 before / after
+
+Before：
+
+> 我在改一个复杂功能，需求、历史尝试、报错和几段代码都混在一起了，你先帮我看看怎么继续。
+
+After：
+
+> 用 `ai-native-loop` 先输出 `Diagnosis Card` 和 `Task Packet`：明确这轮目标、当前状态、约束、成功信号和下一检查点；如果判断为 `medium` 以上介入，再补反馈归因和下一轮输入。
 
 ### 三个典型请求
 
@@ -129,9 +169,15 @@ Skill 会：
 - `docs/iteration-execution-plan-v0.2.0.md`
   当前迭代回合的完整执行方案。
 - `docs/benchmark-matrix.md`
-  固定测例矩阵与通过标准。
+  固定测例矩阵、baseline 对照与通过标准。
+- `docs/evaluation-rubric.md`
+  benchmark 与 before/after 对照的统一评分标准。
+- `docs/experiment-log-template.md`
+  假设驱动的迭代记录模板。
 - `docs/benchmark-results-v0.2.0.md`
   4 个真实测例的汇总结果与评分。
+- `docs/benchmarks/runs/`
+  benchmark 的实际运行记录与准备稿目录。
 - `docs/field-notes/`
   真实任务的最小回收物，用于演示和驱动经验升级。
 - `docs/benchmarks/benchmark-05-multi-agent-decomposition.md`
@@ -150,6 +196,8 @@ Skill 会：
   首个正式案例：Skill 用自己完成自评、补齐、验证与发布。
 - `docs/cases/case-02-mrna-research-to-report.md`
   外部案例：复杂研究任务如何被组织成调查、技术重建与最终成稿的闭环。
+- `docs/cases/case-03-audit-remediation-to-validation-hardening.md`
+  仓库治理案例：如何把审计反馈收口为版本单源、验证模板和默认回收路径修复。
 - `docs/iteration-assessment-against-web-access.md`
   对标 `web-access` 后形成的迭代评估与优先级清单。
 - `docs/trigger-examples.md`
@@ -183,7 +231,7 @@ Skill 会：
 
 当前正式版本标签：`v0.1.0`
 
-当前主线状态：`v0.2.0` draft / execution in progress
+当前主线状态：`v0.2.0` draft / validation hardening
 
 当前主线已经具备：
 
@@ -202,10 +250,11 @@ Skill 会：
 - 多 Agent 交接模板
 - benchmark 矩阵骨架
 - GitHub 开源仓库级文档
-- 两个正式案例
+- 三个正式案例
 
 仍建议继续补充：
 
+- baseline + pairwise benchmark 记录
 - 更多 live benchmark 记录
 - 更多外部真实案例样本
 - 不同领域下的触发边界对照
@@ -214,7 +263,8 @@ Skill 会：
 
 当前 `v0.2.0` 版本说明草案见：
 
-- [release-notes-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/release-notes-v0.2.0.md)
+- [release-notes-v0.2.0.md](docs/release-notes-v0.2.0.md)
+- [release-manifest.md](docs/release-manifest.md)
 
 ## License
 

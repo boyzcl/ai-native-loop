@@ -1,7 +1,7 @@
 interface:
   display_name: "AI Native Loop"
-  short_description: "Diagnose and rebuild AI-native workflow loops"
-  default_prompt: "Use $ai-native-loop to diagnose the current loop, build a task packet, read feedback, and produce a better next input."
+  short_description: "Turn messy work into a task packet, feedback loop, and better next input"
+  default_prompt: "Use $ai-native-loop to diagnose the current loop, build a task packet, keep decision boundaries clear, and for medium-plus tasks leave a recovery block for the next round."
 
 policy:
   allow_implicit_invocation: true

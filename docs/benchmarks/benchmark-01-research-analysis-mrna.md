@@ -4,10 +4,12 @@
 
 - Category: 研究分析
 - Source materials:
-  - [执行指令.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/执行指令.md)
-  - [findings.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/findings.md)
-  - [pipeline.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/pipeline.md)
-  - [report.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/report.md)
+  - `执行指令.md`
+  - `findings.md`
+  - `pipeline.md`
+  - `report.md`
+- Note:
+  - 这些源材料保存在仓库外的私有工作目录中，因此这里不提供仓库内跳转链接。
 
 ## Original Request
 
@@ -76,7 +78,7 @@
 - `findings.md`
 - `pipeline.md`
 
-折叠成了新的输入，最终得到 [report.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/report.md)。
+折叠成了新的输入，最终得到 `report.md`。
 
 ## Scores
 

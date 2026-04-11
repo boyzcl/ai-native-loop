@@ -44,24 +44,41 @@
 - 主 agent / 子 agent 职责不混淆
 - 回收物格式统一
 - 最终结果不是多个输出的简单拼接，而是经过主 agent 再整合
+- `decomposition_quality` 不低于 4 / 5
 
 ## Suggested Scoring Lens
 
-建议沿用通用五维评分：
+建议沿用通用 rubric：
 
 - `clarity`
 - `executability`
+- `boundary_control`
 - `feedback_quality`
 - `reinput_quality`
 - `transferability`
+- `context_efficiency`
+- `real_task_helpfulness`
 
 额外观察项：
 
 - `decomposition_quality`
   是否真的拆在了正确边界上。
 
+统一评分细则见 [evaluation-rubric.md](../evaluation-rubric.md)。
+
+## Required Comparison
+
+这个场景执行时，至少比较：
+
+1. `baseline`
+   - 单线程处理，不拆 agent
+2. `candidate`
+   - 按多 Agent 规则拆分
+
+只有在 `candidate` 明显改善整合质量、上下文噪音或主 agent 负担时，才应判定“拆分有效”。
+
 ## Current Status
 
-当前状态：**场景已建立，待执行实测**。
+当前状态：**场景已建立，待执行 baseline / candidate 实测**。
 
 它的作用不是回填一个虚假的高分案例，而是把多 Agent 从“悬空能力声明”变成固定可测场景。

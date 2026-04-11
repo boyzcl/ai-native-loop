@@ -57,10 +57,12 @@
 
 这个案例的强度很高，因为它已经天然形成了一条完整工件链：
 
-- 原始执行协议：[执行指令.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/执行指令.md)
-- 中间调查产物：[findings.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/findings.md)
-- 技术流水线手册：[pipeline.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/pipeline.md)
-- 最终整合成稿：[report.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/report.md)
+- 原始执行协议：`执行指令.md`
+- 中间调查产物：`findings.md`
+- 技术流水线手册：`pipeline.md`
+- 最终整合成稿：`report.md`
+
+这些工件保存在仓库外的私有工作目录中，因此这里保留文件名说明，不提供仓库内跳转链接。
 
 这意味着它不是只有“最后一篇文章”，而是保留了从任务定义到中间层再到终稿的全过程证据。这非常适合被 `ai-native-loop` 复盘。
 
@@ -105,7 +107,7 @@
 
 任务没有被写成一句“帮我调查一下这个事”，而是被重写成了一份高约束的执行协议。
 
-这一点体现在 [执行指令.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/执行指令.md)：
+这一点体现在外部工作文件 `执行指令.md`：
 
 - 先定义角色
 - 再定义调查目标
@@ -127,7 +129,7 @@
 - 文献背景进入支撑层
 - 已确认、合理推断、信息缺口被显式区分
 
-这一点在 [findings.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/findings.md) 和 [pipeline.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/pipeline.md) 里都很明显。
+这一点在外部工作文件 `findings.md` 和 `pipeline.md` 里都很明显。
 
 这说明这个过程的执行质量，不只是“信息多不多”，而是“信息有没有被组织成后续可继续推进的结构”。
 
@@ -140,7 +142,7 @@
 - 哪些关键细节仍然公开缺失
 - 哪些技术节点适合写进手册，哪些只能保留为限制说明
 
-这类反馈被显式折叠进了 [findings.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/findings.md) 的“信息可信度地图”和“局限性与争议”结构里。
+这类反馈被显式折叠进了外部工作文件 `findings.md` 的“信息可信度地图”和“局限性与争议”结构里。
 
 这正符合 `ai-native-loop` 的一个核心判断：
 
@@ -154,7 +156,7 @@
 
 - 调查结果沉淀为 `findings.md`
 - 技术重建沉淀为 `pipeline.md`
-- 这两个文件再被折叠为 [report.md](/Users/boyzcl/Documents/A/存量文章撰写/mRNA/report.md)
+- 这两个文件再被折叠为 `report.md`
 
 也就是说，这个过程天然完成了：
 
@@ -239,7 +241,7 @@
 
 > `Case 02`：验证 `ai-native-loop` 如何把一个复杂研究任务，推进为可调查、可归因、可成稿、可继续迭代的知识工作闭环。
 
-它和 [case-01-self-bootstrap.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/cases/case-01-self-bootstrap.md) 形成了一个很好的组合：
+它和 [case-01-self-bootstrap.md](case-01-self-bootstrap.md) 形成了一个很好的组合：
 
 - `Case 01` 证明 Skill 能运营自己的闭环
 - `Case 02` 证明 Skill 能迁移到外部研究与写作场景

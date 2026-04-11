@@ -66,6 +66,6 @@
 
 ## Promotion Trace
 
-- Promoted pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
-- Promoted failure mode: [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)
-- Validated benchmark: [benchmark-04-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
+- Promoted pattern: [decision-structuring.md](../../patterns/decision-structuring.md)
+- Promoted failure mode: [failure-modes.md](../../references/failure-modes.md)
+- Validated benchmark: [benchmark-04-decision-structuring-skincare.md](../benchmarks/benchmark-04-decision-structuring-skincare.md)

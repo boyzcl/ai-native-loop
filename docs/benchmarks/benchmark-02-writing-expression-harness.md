@@ -4,9 +4,11 @@
 
 - Category: 写作表达
 - Source materials:
-  - [harness_engineering_instruction.md](/Users/boyzcl/Documents/A/存量文章撰写/Harness/harness_engineering_instruction.md)
-  - [02_大纲.md](/Users/boyzcl/Documents/A/存量文章撰写/Harness/02_大纲.md)
-  - [04_自审记录.md](/Users/boyzcl/Documents/A/存量文章撰写/Harness/04_自审记录.md)
+  - `harness_engineering_instruction.md`
+  - `02_大纲.md`
+  - `04_自审记录.md`
+- Note:
+  - 这些源材料保存在仓库外的私有工作目录中，因此这里不提供仓库内跳转链接。
 
 ## Original Request
 

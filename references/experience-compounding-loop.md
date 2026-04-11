@@ -32,9 +32,24 @@
 5. `promote`
    把通过筛选的经验提升到对应层级。
 
+在当前阶段，`capture` 的默认动作不是直接写完整 case study，而是先留下一个最小 `Loop Recovery Block`。
+
+## Loop Recovery Block
+
+对 `medium` 及以上任务，默认先保留：
+
+- `scene`
+- `initial_block`
+- `artifacts_produced`
+- `what_worked`
+- `remaining_risk`
+- `next_input`
+
+这个回收块的目标不是完整复盘，而是保证后续还看得见这轮真正发生了什么。
+
 ## Minimum Field Note
 
-每次显著任务结束后，最少应记录：
+当某个 recovery block 值得继续升级时，再扩成 field note。每次显著任务结束后，field note 最少应记录：
 
 - `scene`
   任务发生在什么场景。
@@ -53,7 +68,7 @@
 - `next_input`
   下一轮输入被改写成什么。
 
-没有这些字段，后续几乎无法稳定提炼。
+没有 recovery block 或 field note，后续几乎无法稳定提炼。
 
 ## Triage Rules
 
@@ -92,10 +107,10 @@
 
 当前仓库已经有一条真实示范链：
 
-- Field note: [field-note-01-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-notes/field-note-01-decision-structuring-skincare.md)
-- Pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
-- Failure mode: [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)
-- Benchmark: [benchmark-04-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
+- Field note: [field-note-01-decision-structuring-skincare.md](../docs/field-notes/field-note-01-decision-structuring-skincare.md)
+- Pattern: [decision-structuring.md](../patterns/decision-structuring.md)
+- Failure mode: [failure-modes.md](failure-modes.md)
+- Benchmark: [benchmark-04-decision-structuring-skincare.md](../docs/benchmarks/benchmark-04-decision-structuring-skincare.md)
 
 它演示的是：
 
@@ -114,7 +129,7 @@
 
 ### Level 2
 
-默认输出里自带“回收字段”。
+默认输出里自带 `Loop Recovery Block`。
 
 ### Level 3
 

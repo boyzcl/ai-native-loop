@@ -4,8 +4,10 @@
 
 - Category: 决策整理
 - Source materials:
-  - [化妆品评估指令.md](/Users/boyzcl/Documents/A/存量文章撰写/huazhuang/化妆品评估指令.md)
-  - [护肤品品类价值评估报告.md](/Users/boyzcl/Documents/A/存量文章撰写/huazhuang/护肤品品类价值评估报告.md)
+  - `化妆品评估指令.md`
+  - `护肤品品类价值评估报告.md`
+- Note:
+  - 这些源材料保存在仓库外的私有工作目录中，因此这里不提供仓库内跳转链接。
 
 ## Original Request
 
@@ -93,6 +95,6 @@
 
 ## Promotion Trace
 
-- Source field note: [field-note-01-decision-structuring-skincare.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/field-notes/field-note-01-decision-structuring-skincare.md)
-- Promoted pattern: [decision-structuring.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/patterns/decision-structuring.md)
-- Related failure mode: [failure-modes.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/references/failure-modes.md)
+- Source field note: [field-note-01-decision-structuring-skincare.md](../field-notes/field-note-01-decision-structuring-skincare.md)
+- Promoted pattern: [decision-structuring.md](../../patterns/decision-structuring.md)
+- Related failure mode: [failure-modes.md](../../references/failure-modes.md)
