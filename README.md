@@ -116,7 +116,9 @@ Skill 会：
 - `docs/iteration-execution-plan-v0.2.0.md`
   当前迭代回合的完整执行方案。
 - `docs/benchmark-matrix.md`
-  后续评估 Skill 效果的固定测例矩阵。
+  固定测例矩阵与通过标准。
+- `docs/benchmark-results-v0.2.0.md`
+  4 个真实测例的汇总结果与评分。
 - `docs/self-evaluation.md`
   使用 `ai-native-loop` 对当前 Skill 做的完成度与质量评估。
 - `docs/forward-test.md`
@@ -179,7 +181,7 @@ Skill 会：
 
 仍建议继续补充：
 
-- 4 个 benchmark 场景的实测记录
+- 更多 live benchmark 记录
 - 更多外部真实案例样本
 - 不同领域下的触发边界对照
 - 长周期使用后的版本迭代记录

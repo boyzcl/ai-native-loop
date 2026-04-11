@@ -53,4 +53,6 @@
 ## Current Status
 
 - 矩阵已建立
-- 固定测例待逐步补齐
+- 4 个固定测例已补齐
+- 汇总结果见 [benchmark-results-v0.2.0.md](/Users/boyzcl/Documents/AI%20native/ai-native-loop/docs/benchmark-results-v0.2.0.md)
+- 本轮回放式 benchmark 结果：平均分 `4.70`，`reinput_quality` 平均分 `4.63`，达到 `v0.2.0` 通过标准

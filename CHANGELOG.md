@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Failure modes reference covering common loop breakdowns and correction rules
 - Pattern library with initial self-bootstrap and research-to-report patterns
 - Benchmark matrix defining fixed scenarios and pass criteria for future evaluation
+- Executed 4 retrospective benchmark cases across research, writing, product, and decision workflows with a 4.70 average score
 - Case 02 documenting how the skill transfers to a research-and-writing workflow via the Rosie mRNA investigation chain
 
 ## v0.1.0 - 2026-04-11
