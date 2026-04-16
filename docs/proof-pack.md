@@ -44,8 +44,21 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
 - `remaining_risk`
 - `next_input`
 
+一个最小 CLI 写入例子：
+
+```bash
+python3 ~/.codex/skills/ai-native-loop/scripts/write_runtime_capture.py --record-file /path/to/capture.json
+```
+
+一个最小 CLI 读取例子：
+
+```bash
+python3 ~/.codex/skills/ai-native-loop/scripts/read_runtime_context.py --scene research-to-report --limit 3
+```
+
 ## Validation Path
 
 1. 用 [validate_runtime_memory.py](../scripts/validate_runtime_memory.py) 检查目录结构
 2. 用 [smoke_test_runtime_memory.py](../scripts/smoke_test_runtime_memory.py) 跑端到端烟雾测试
 3. 用 [benchmark-run-template.md](benchmarks/benchmark-run-template.md) 记录 runtime provenance
+4. 参考 [experiment-log-runtime-memory-bootstrap.md](experiments/experiment-log-runtime-memory-bootstrap.md) 查看一条已执行实验样本

@@ -138,12 +138,26 @@ After：
 - `scripts/init_runtime_memory.py`
 - `scripts/validate_runtime_memory.py`
 - `scripts/smoke_test_runtime_memory.py`
+- `scripts/write_runtime_capture.py`
+- `scripts/read_runtime_context.py`
 
 它们分别用于：
 
 - 初始化本地 runtime 目录
 - 校验 runtime 结构与 capture schema
 - 用临时目录跑一轮端到端 smoke test
+- 把一条结构化记录追加到本地 runtime capture
+- 按 `scene` 读取最近的 runtime 经验
+
+## Feedback Loop
+
+repo 侧已经补了最小反馈入口：
+
+- `False Positive Trigger`
+- `False Negative Trigger`
+- `Share Runtime Capture`
+
+这些模板的目标不是做社区装饰，而是把触发边界和 runtime 经验层真正推向外部反馈。
 
 ## Repo Map
 

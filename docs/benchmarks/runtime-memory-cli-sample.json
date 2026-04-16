@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-04-16T22:40:00+08:00",
+  "session_id": "runtime-cli-sample-20260416",
+  "skill_name": "ai-native-loop",
+  "scene": "runtime-cli-sample",
+  "objective": "verify the write_runtime_capture CLI on the installed skill copy",
+  "initial_block": "need a command-level append path, not only a library function",
+  "intervention_level": "medium",
+  "artifacts_produced": [
+    "Diagnosis Card",
+    "Task Packet",
+    "Loop Recovery Block"
+  ],
+  "what_worked": "CLI append gives normal skill usage a concrete write path",
+  "remaining_risk": "real conversations still rely on the agent following the contract",
+  "next_input": "read this capture by scene and confirm retrieval works through the CLI",
+  "candidate_pattern_tags": [
+    "self-bootstrap"
+  ],
+  "candidate_failure_tags": [
+    "repo-only-experience-storage"
+  ],
+  "promotion_hint": "review_for_field_note"
+}

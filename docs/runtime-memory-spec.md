@@ -90,6 +90,10 @@
   - 检查目录结构、JSON 文件和 capture schema
 - `scripts/smoke_test_runtime_memory.py`
   - 用临时目录跑一轮端到端 smoke test
+- `scripts/write_runtime_capture.py`
+  - 读取一条 JSON 记录并追加到 runtime capture
+- `scripts/read_runtime_context.py`
+  - 按 `scene` 读取最近 captures，供下一轮调用前预读取
 
 ## Non-Goals
 
