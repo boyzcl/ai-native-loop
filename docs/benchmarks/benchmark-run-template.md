@@ -45,6 +45,13 @@
 - candidate_artifacts:
 - optional_previous_artifacts:
 
+## Runtime Memory Provenance
+
+- runtime_capture_written:
+- runtime_capture_ref:
+- runtime_read_refs:
+- runtime_reuse_observed:
+
 ## Scores
 
 按 [evaluation-rubric.md](../evaluation-rubric.md) 逐项评分：
@@ -86,3 +93,4 @@
 - 没有 baseline 时，可以先记 `candidate`，但不能下“明显更好”的强结论
 - 如果是版本迭代，优先补 `previous`
 - 对多 Agent 场景，必须额外写清 `decomposition_quality`
+- 对 runtime compounding 相关声明，必须写清 `runtime_capture_ref` 与 `runtime_reuse_observed`

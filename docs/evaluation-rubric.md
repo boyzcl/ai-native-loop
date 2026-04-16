@@ -70,6 +70,16 @@
 - 3：能帮助推进，但仍有明显阻塞留在系统外
 - 5：真实阻塞被有效降低，用户或主 agent 知道下一步怎么继续
 
+## Runtime Evidence Rule
+
+如果评估的问题涉及“经验是否进入下一轮系统”，必须额外检查：
+
+- 是否写入了 runtime capture
+- 是否能引用具体 `runtime_capture_ref`
+- 下一次调用是否真的复用了 runtime 经验
+
+这些是证据要求，不替代上面的 8 个维度。
+
 ## Comparison Rule
 
 优先使用以下评估方式：
@@ -98,6 +108,11 @@
 
 - `boundary_control >= 4`
 - `context_efficiency >= 4`
+
+对 runtime compounding 相关声明额外要求：
+
+- 存在 `runtime_capture_ref`
+- 至少一次 `runtime_reuse_observed = yes`
 
 ## Scoring Note
 

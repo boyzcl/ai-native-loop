@@ -24,6 +24,13 @@
 - 预期改善哪个维度？
 - 预期伤害哪个维度？
 
+## Runtime Memory
+
+- runtime_root:
+- capture_written:
+- capture_ref:
+- expected_runtime_reuse:
+
 ## Benchmark Set
 
 - 本轮使用哪些固定测例？
@@ -40,6 +47,7 @@
 - 哪些维度更好了？
 - 哪些维度没变？
 - 哪些维度变差了？
+- runtime reuse 是否真的发生？
 
 ## Decision
 
@@ -54,4 +62,5 @@
 
 - 没有假设，不开实验
 - 没有对照，不下强结论
+- 没有 runtime provenance，不对“经验复利”下强结论
 - 没有结果差异，不扩大改动范围

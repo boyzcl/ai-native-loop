@@ -1,12 +1,13 @@
 # ai-native-loop
 
-`ai-native-loop` 是一个工作协议层 Skill。
+`ai-native-loop` 是一个协议型工作流 Skill。
 
 它解决的不是“再给我一个答案”，而是：
 
-- 输入太乱，当前轮不知道该推进什么
+- 输入太乱，当前轮任务包不清楚
 - AI 已经有输出，但反馈进不了下一轮
-- 任务跨阶段或多 Agent，结果很难回收和整合
+- 任务跨阶段或多 Agent，结果难回收
+- 经验用过一次就蒸发，下次还要重新摸索
 
 一句话说：
 
@@ -16,7 +17,40 @@
 
 - Release truth: [release-manifest.md](docs/release-manifest.md)
 - Current public version: `v0.1.0`
-- Current iteration track: `v0.2.0` draft / validation hardening
+- Current iteration track: `v0.2.0` draft / runtime compounding + validation hardening
+
+## 60-Second Start
+
+### Install
+
+```bash
+git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
+python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
+```
+
+### Use It Explicitly
+
+当前版本默认建议显式调用：
+
+- `用 $ai-native-loop 帮我把这个任务整理成更适合 AI 协作的闭环。`
+- `用 $ai-native-loop 看看我现在卡住的根因是在输入、执行还是反馈。`
+- `用 $ai-native-loop 帮我把这轮结果折叠成下一轮输入，并写入 runtime capture。`
+
+不要依赖隐式触发来判断项目是否“可用”。
+
+### What You Will See
+
+典型输出会收敛为：
+
+- `Diagnosis Card`
+- `Task Packet`
+- `Feedback Attribution Card`
+- `Re-input Packet`
+- `Loop Recovery Block`
+
+对 `medium` 及以上介入，默认还应把这轮结构化经验写入：
+
+- `~/.codex/skills/ai-native-loop/runtime/captures/`
 
 ## When To Use
 
@@ -37,40 +71,18 @@
 
 更完整的触发规则见 [SKILL.md](SKILL.md)、[trigger-examples.md](docs/trigger-examples.md) 和 [trigger-regression-suite.md](docs/trigger-regression-suite.md)。
 
-## What It Produces
+## Why This Version Is Different
 
-这个 Skill 默认把介入收敛成一组固定工件，而不是泛建议：
+`v0.2.0` 的关键变化不只是多了几份文档，而是把经验沉淀从“回答尾部的协议块”推进成“本地 skill 目录中的默认运行层”：
 
-- `Diagnosis Card`
-  - 当前卡在哪一环，为什么要用当前介入等级
-- `Task Packet`
-  - 把原始请求压成 AI / Agent 可执行的任务包
-- `Feedback Attribution Card`
-  - 把“结果不对”改写成可行动的反馈归因
-- `Re-input Packet`
-  - 把本轮结果折成下一轮更好的输入
-- `Loop Recovery Block`
-  - 对 `medium` 及以上任务，作为输出末尾的默认回收块留下最小经验痕迹
+- `medium+` 任务结束后保留 `Loop Recovery Block`
+- 同结构内容写入本地 `runtime capture`
+- 下一次调用时只按需读取少量相关经验
+- 值得提升的样本再进入 field note / pattern / failure mode / benchmark
 
-核心工件定义见 [core-operating-primitives.md](references/core-operating-primitives.md)。
+运行时规格见 [runtime-memory-spec.md](docs/runtime-memory-spec.md)。
 
-## Quick Start
-
-### Install
-
-```bash
-git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
-```
-
-### Trigger
-
-直接这样说就可以：
-
-- `用 $ai-native-loop 帮我把这个任务整理成更适合 AI 协作的闭环。`
-- `用 $ai-native-loop 看看我现在卡住的根因是在输入、执行还是反馈。`
-- `用 $ai-native-loop 帮我把这轮结果折叠成下一轮输入。`
-
-### Before / After
+## Before / After
 
 Before：
 
@@ -78,81 +90,72 @@ Before：
 
 After：
 
-> 用 `ai-native-loop` 先输出 `Diagnosis Card` 和 `Task Packet`：明确这轮目标、当前状态、约束、成功信号和下一检查点；如果判断为 `medium` 以上介入，再补反馈归因和下一轮输入。
+> 用 `ai-native-loop` 先输出 `Diagnosis Card` 和 `Task Packet`：明确这轮目标、当前状态、约束、成功信号和下一检查点；如果判断为 `medium` 以上介入，再补反馈归因、下一轮输入，并把 recovery block 写入本地 runtime capture。
 
-默认结束动作：
+## Compatibility
 
-> 对 `medium` 及以上介入，主输出最后默认追加一个 `Loop Recovery Block`，把这轮最小可复用经验收住。
+当前推荐使用方式与已验证前提见：
 
-## How It Works
+- [compatibility-and-invocation.md](docs/compatibility-and-invocation.md)
 
-这个 Skill 的核心不是固定流程，而是动态介入：
+一句话版本：
 
-- `light`
-  - 上下文大体成熟，只缺更清晰的下一步
-- `medium`
-  - 任务跨材料或阶段，循环噪音较大
-- `strong`
-  - 任务高风险、反复失败、跨轮或多 Agent 协作依赖重
+- 推荐环境：本地 Codex skill 宿主，且有文件系统写权限
+- 推荐触发方式：显式调用 `$ai-native-loop`
+- 当前不推荐把隐式触发当作稳定能力承诺
 
-它背后的工作循环是：
+## Proof Pack
 
-1. 诊断当前卡点
-2. 重写任务包
-3. 重新组织人机 / 多 Agent 分工
-4. 读取反馈，而不是只读取输出
-5. 改写下一轮输入
-6. 为经验复利用最小成本留下痕迹
+如果你只想快速判断它是否值得试，先看：
 
-更完整的架构说明见 [skill-architecture.md](docs/skill-architecture.md)。
+- [proof-pack.md](docs/proof-pack.md)
 
-## Why It Exists
+这里包含：
 
-大多数人已经会“用 AI”，但还没有形成稳定的 AI native 工作循环。
+- 一个可复制输入
+- 一个目标输出形状
+- 一个 runtime capture 示例
+- 一个验证入口
 
-这个 Skill 的目标不是替你做完某一个任务，而是让你和 AI 的协作越来越：
+## Validation
 
-- 可执行
-- 可反馈
-- 可回收
-- 可迁移
-
-它不是：
-
-- 单次任务顾问
-- 提示词美化器
-- 编程专用技巧包
-- 替用户思考的黑箱代理
-
-## Proof And Validation
-
-这个仓库已经不只是在写理念，也在补验证和经验复利层：
+这个仓库已经不只是在写理念，也在补验证与经验复利层：
 
 - 版本与状态单一事实源： [release-manifest.md](docs/release-manifest.md)
 - Skill 结构图： [skill-architecture.md](docs/skill-architecture.md)
+- 运行时经验层规格： [runtime-memory-spec.md](docs/runtime-memory-spec.md)
+- 运行时晋升策略： [runtime-promotion-policy.md](docs/runtime-promotion-policy.md)
 - 触发边界与回归集： [trigger-examples.md](docs/trigger-examples.md), [trigger-regression-suite.md](docs/trigger-regression-suite.md)
 - benchmark 矩阵： [benchmark-matrix.md](docs/benchmark-matrix.md)
 - 统一评分标准： [evaluation-rubric.md](docs/evaluation-rubric.md)
 - 实验模板： [experiment-log-template.md](docs/experiment-log-template.md)
 - 当前 benchmark 汇总： [benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
-- 经验复利规则： [experience-compounding-loop.md](references/experience-compounding-loop.md)
+
+## Runtime Helpers
+
+本轮新增了最小 runtime helper scripts：
+
+- `scripts/init_runtime_memory.py`
+- `scripts/validate_runtime_memory.py`
+- `scripts/smoke_test_runtime_memory.py`
+
+它们分别用于：
+
+- 初始化本地 runtime 目录
+- 校验 runtime 结构与 capture schema
+- 用临时目录跑一轮端到端 smoke test
 
 ## Repo Map
 
 如果你第一次看这个仓库，最值得先读的是这些文件：
 
 - [SKILL.md](SKILL.md)
-  - Skill 主体与调用规则
-- [core-operating-primitives.md](references/core-operating-primitives.md)
-  - 四个核心工件与最小完备动作集
-- [skill-architecture.md](docs/skill-architecture.md)
-  - 这个 Skill 的结构图
-- [trigger-regression-suite.md](docs/trigger-regression-suite.md)
-  - 触发边界回归测试集
-- [experience-compounding-loop.md](references/experience-compounding-loop.md)
-  - 经验如何进入下一轮系统
-- [benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
-  - 当前验证结果与边界
+- [docs/runtime-memory-spec.md](docs/runtime-memory-spec.md)
+- [docs/runtime-promotion-policy.md](docs/runtime-promotion-policy.md)
+- [references/core-operating-primitives.md](references/core-operating-primitives.md)
+- [references/experience-compounding-loop.md](references/experience-compounding-loop.md)
+- [docs/benchmark-matrix.md](docs/benchmark-matrix.md)
+- [docs/benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
 
 ## License
 

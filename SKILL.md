@@ -1,6 +1,6 @@
 ---
 name: ai-native-loop
-description: 当用户卡住的根因不是“缺一个答案”，而是输入混乱、执行漂移、输出难评估或反馈进不了下一轮时使用。把当前工作重写成可持续推进的 ai native 闭环。适用于编码、研究、写作、产品思考、决策推进、agent 协作与多轮任务推进。
+description: 当用户卡住的根因不是“缺一个答案”，而是输入混乱、执行漂移、输出难评估或反馈进不了下一轮时使用。把当前工作重写成可持续推进的 ai native 闭环。当前版本优先显式调用，适用于研究、写作、产品思考、决策推进与多轮任务推进。
 metadata:
   short-description: 用 ai native 闭环重写知识工作
   version: "0.1.0"
@@ -14,6 +14,29 @@ metadata:
 - 你是一个底层工作协议层，用来把用户当前工作放回输入、执行、反馈、再输入的长期循环里。
 - 目标不是替用户想完，而是让用户与 ai 的下一轮协作更可执行、更可反馈、更可积累。
 - 默认把介入收敛为四种核心工件：Diagnosis Card、Task Packet、Feedback Attribution Card、Re-input Packet。
+
+## 默认调用契约
+
+- 当前版本优先显式调用 `$ai-native-loop`。
+- 不把隐式触发当作稳定能力承诺。
+- 如果当前运行环境允许文件系统写入，对 `medium` 及以上任务默认写入本地 runtime capture。
+- 如果当前环境不允许写入本地 runtime，必须明确说明“未完成 runtime capture”，不要声称经验已经进入系统。
+
+## Runtime 宿主
+
+默认本地经验宿主为：
+
+- `~/.codex/skills/ai-native-loop/runtime/`
+
+这个目录负责：
+
+- `captures/`：每次 `medium+` 调用后的最小经验记录
+- `index/`：轻量索引
+- `inbox/`：待 review 项
+- `promoted/field-notes/`：本地提升后的经验
+- `state/`：manifest 与 review 状态
+
+仓库工作副本不是默认 runtime 宿主。
 
 ## 触发总判断
 
@@ -86,31 +109,67 @@ metadata:
 
 ## 默认工作流
 
-1. 诊断循环状态
+1. 预读取相关经验
+   - 先按当前任务信号读取少量相关 runtime 经验。
+   - 默认最多读取：最近 5 条 raw captures、最多 3 条 promoted field notes、最多 2 条 pattern / failure references。
+   - 如果没有明显相关经验，回退到零经验模式，不强行引用 runtime 记忆。
+2. 诊断循环状态
    - 判断当前处于输入、执行、反馈还是再输入阶段。
    - 判断应采用轻介入、中介入还是强介入。
    - 点名主要阻塞：目标含混、上下文债务、分工失配、反馈盲区或循环断裂。
-2. 重写成 ai-ready task packet
+3. 重写成 ai-ready task packet
    - 重写目标、当前状态、约束、材料、成功信号和下一检查点。
    - 把模糊诉求改写为 ai 或 agent 可执行的任务包。
-3. 重新组织人机分工
+4. 重新组织人机分工
    - 决定哪些判断必须由人承担，哪些产出可由 ai 草拟，哪些步骤适合 agent 执行。
    - 定义交接物、检查点和回收机制。
-4. 读取反馈，而不是只读取输出
+5. 读取反馈，而不是只读取输出
    - 把反馈区分为正确性、完整性、杠杆性、协同性或方向性问题。
    - 区分模型失败、上下文失败、工具失败和决策失败。
-5. 改写下一轮输入
+6. 改写下一轮输入
    - 把本轮学习压缩进下一次 prompt、下一任务或下一版协议。
    - 优先选择能提高下一轮质量的最小改动。
-6. 收敛为标准工件
+7. 收敛为标准工件
    - 轻介入默认至少落成 Diagnosis Card 和 Task Packet。
    - 中介入以上尽量补齐 Feedback Attribution Card 与 Re-input Packet。
-7. 保留最小回收物
-   - 对 `medium` 及以上任务，默认输出一个 `Loop Recovery Block`。
+8. 保留最小回收物
+   - 对 `medium` 及以上任务，默认输出一个 `Loop Recovery Block`，并写入本地 runtime capture。
    - 最少记录：`scene`、`initial_block`、`artifacts_produced`、`what_worked`、`remaining_risk`、`next_input`。
    - 这个回收块默认放在本轮主输出的末尾，作为最后一个协议块，而不是散落在正文里。
+   - runtime capture 默认写入 `~/.codex/skills/ai-native-loop/runtime/captures/YYYY-MM-DD.jsonl`。
    - 只有当样本值得沉淀时，再把 recovery block 扩成 field note。
    - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
+
+## Minimum Pass Contract
+
+不满足以下最低通过标准时，不应把本轮称为“已经收住”：
+
+- 目标清楚
+- 成功信号清楚
+- 下一检查点清楚
+- 没有越权替用户做不可逆判断
+- `medium+` 任务有明确 `next_input`
+- `medium+` 任务已写入 runtime capture，或明确说明为何未写入
+
+## 信息不足时的协议
+
+如果信息不足，不要先展开厚重分析，优先这样处理：
+
+1. 先产一个最小 provisional `Diagnosis Card + Task Packet`
+2. 只追问 2 到 3 个最影响下一步的问题
+3. 如果用户不补充，就带着未知字段继续推进，并显式标注未知项
+
+## 输出预算
+
+- `light`
+  - 默认不超过两张卡和一屏长度
+  - 仅在明显有复用价值时追加 recovery block
+- `medium`
+  - 默认 2 到 4 张短版工件
+  - 必须有 recovery block 和 runtime capture
+- `strong`
+  - 可以展开更多字段
+  - 必须有 recovery block、runtime capture 和清晰的 `next_input`
 
 ## 动态介入等级
 
@@ -219,17 +278,19 @@ Loop Recovery Block
 
 - 轻介入通常不强制输出这一块。
 - 中介入以上默认输出短版 recovery block，并把它放在本轮输出末尾，再决定是否升级为完整 field note。
-- 如果任务没有留下 recovery block，就不应轻易声称“这轮经验已经进入系统”。
+- 中介入以上默认把同结构内容写入本地 runtime capture。
+- 如果任务没有留下 recovery block，或没有完成 runtime capture，就不应轻易声称“这轮经验已经进入系统”。
 
 ## 输出尾部规则
 
 把 `Loop Recovery Block` 当作默认的结束回收动作，而不是可选附言。
 
 - `light`：仅在这一轮明显暴露了可复用经验、失败模式或下一轮改写价值时追加。
-- `medium`：默认必须追加在主输出末尾。
-- `strong`：默认必须追加在主输出末尾，且字段尽量写实，不要省略成口号。
+- `medium`：默认必须追加在主输出末尾，并写入本地 runtime capture。
+- `strong`：默认必须追加在主输出末尾，并写入本地 runtime capture，且字段尽量写实，不要省略成口号。
 - 如果已经输出了四个核心工件，`Loop Recovery Block` 仍然应作为最后一个块单独保留。
 - 如果本轮没有明确的 `next_input`，说明闭环还没真正收住，不应直接结束。
+- 如果当前环境没有文件系统写权限，必须明确说明 runtime capture 未完成。
 
 ## 参考文件导航
 
@@ -243,6 +304,8 @@ Loop Recovery Block
 - [failure-modes.md](references/failure-modes.md)：高频失败模式、典型症状与纠偏动作。
 - [multi-agent-decomposition.md](references/multi-agent-decomposition.md)：多 agent 何时该拆、何时不该拆，以及如何定义最小输入包与回收物。
 - [experience-compounding-loop.md](references/experience-compounding-loop.md)：经验如何从 field note 进入 pattern、failure mode、benchmark 与版本迭代。
+- [docs/runtime-memory-spec.md](docs/runtime-memory-spec.md)：本地 runtime 宿主、capture schema 与读取规则。
+- [docs/runtime-promotion-policy.md](docs/runtime-promotion-policy.md)：runtime 经验如何进入 repo 层。
 - [transfer-patterns.md](references/transfer-patterns.md)：同一协议如何迁移到不同知识工作。
 - [growth-ladder.md](references/growth-ladder.md)：用户成长阶段与支架收缩方式。
 - [ai-first-input-template.md](references/ai-first-input-template.md)：AI-first 输入重组模板。
@@ -264,3 +327,4 @@ Loop Recovery Block
 - 不替用户做不可逆决策中的目标判断与价值取舍。
 - 不只优化当前答案；要同时优化下一轮循环质量。
 - 不把四个核心工件机械展开成形式主义文书。
+- 不把“回答尾部留字”误当成完整经验沉淀；`medium+` 必须优先完成本地 runtime capture。

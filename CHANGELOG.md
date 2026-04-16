@@ -6,18 +6,26 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Runtime memory specification separating local runtime storage from repository assets
+- Runtime promotion policy covering raw capture, review queue, promoted notes, and repo candidate gates
+- Compatibility and invocation guide documenting explicit invocation as the recommended path
+- Proof pack documenting one complete first-run flow
+- Runtime helper scripts for initialization, validation, and smoke testing
+
+### Changed
+
+- `medium+` interventions now require a local runtime capture in addition to the response-tail recovery block
+- Agent metadata now disables implicit invocation by default
+- README now describes the skill as local-first runtime compounding, not repo-only experience capture
+- Benchmark and experiment templates now require runtime provenance for compounding claims
+- Release narrative now frames `v0.2.0` around failure correction and runtime memory, not only added files
+
+### Previously Added
+
 - Release manifest as the canonical source of truth for current version and track state
 - Evaluation rubric and experiment log template for baseline and pairwise validation
 - Default loop recovery block to lower-friction experience capture for medium-plus interventions
 - README smoke test and before/after trigger example for faster first-run adoption
-
-### Changed
-
-- Benchmark matrix now requires baseline comparison and rubric-driven scoring
-- Project status memo is no longer intended to be the live source of version truth
-
-### Previously Added
-
 - v0.2.0 iteration execution plan documenting the next engineering phase for the skill
 - Core operating primitives for Diagnosis Card, Task Packet, Feedback Attribution Card, and Re-input Packet
 - Failure modes reference covering common loop breakdowns and correction rules
@@ -29,7 +37,6 @@ All notable changes to this project will be documented in this file.
 - Benchmark matrix defining fixed scenarios and pass criteria for future evaluation
 - Executed 4 retrospective benchmark cases across research, writing, product, and decision workflows with a 4.70 average score
 - Case 02 documenting how the skill transfers to a research-and-writing workflow via the Rosie mRNA investigation chain
-- Drafted `v0.2.0` release notes to explain the version in failure-driven rather than file-driven terms
 
 ## v0.1.0 - 2026-04-11
 

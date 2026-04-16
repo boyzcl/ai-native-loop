@@ -4,6 +4,12 @@
 
 这份矩阵用于后续评估 `ai-native-loop` 是否真的改善了工作循环，而不是只让输出看起来更结构化。
 
+从本轮开始，验证不只看结构输出，还看：
+
+- 有没有真实 baseline
+- 有没有 pairwise judgment
+- 有没有 runtime provenance
+
 ## Evaluation Rule
 
 每个测例都至少记录：
@@ -16,6 +22,8 @@
 - 产出的核心工件
 - 输出结果
 - 下一轮输入是否得到改写
+- 是否存在 runtime capture
+- 下一轮是否复用了 runtime 经验
 
 默认不再只看单次回放结果，而至少比较：
 
@@ -44,25 +52,28 @@
 每个测例建议至少按以下八项打分：
 
 - `clarity`
-  当前轮目标是否更清楚。
 - `executability`
-  是否形成了可执行任务包。
 - `boundary_control`
-  是否清楚保留用户 / 主 agent 的判断边界。
 - `feedback_quality`
-  反馈是否进入归因结构。
 - `reinput_quality`
-  下一轮输入是否真的被改写。
 - `transferability`
-  该做法是否可迁移到同类任务。
 - `context_efficiency`
-  是否减少了无关上下文和重复叙事。
 - `real_task_helpfulness`
-  是否真实降低了当前任务阻塞。
 
 每项可用 1 到 5 分。
 
 统一评分细则见 [evaluation-rubric.md](evaluation-rubric.md)。
+
+## Runtime Validation Lane
+
+凡是涉及“经验会进入下一轮系统”这类能力声明，benchmark run 还必须额外记录：
+
+- `runtime_capture_written`
+- `runtime_capture_ref`
+- `runtime_read_refs`
+- `runtime_reuse_observed`
+
+如果没有 runtime provenance，不应对“经验复利已经生效”下强结论。
 
 ## Comparison Workflow
 
@@ -71,7 +82,8 @@
 1. 先判断 `candidate` 是否过最低门槛
 2. 再做 `baseline` vs `candidate` pairwise 比较
 3. 如果是版本迭代，再看 `previous` vs `candidate`
-4. 最后才写总体结论
+4. 如果涉及经验复利，再看 runtime provenance 是否成立
+5. 最后才写总体结论
 
 如果没有 baseline，不应下“明显更好”的强结论。
 
@@ -83,12 +95,14 @@
 - 每个测例都有四段式记录
 - 平均分不低于 4.0
 - `reinput_quality` 不得低于 3.5
+- 至少 1 条真实 runtime capture 进入验证链
 
 ## Current Status
 
 - 矩阵已建立
 - 4 个固定测例已补齐
 - 汇总结果见 [benchmark-results-v0.2.0.md](benchmark-results-v0.2.0.md)
-- 本轮回放式 benchmark 结果：平均分 `4.70`，`reinput_quality` 平均分 `4.63`，达到 `v0.2.0` 通过标准
+- 本轮回放式 benchmark 结果：平均分 `4.70`，`reinput_quality` 平均分 `4.63`
 - 多 Agent 协作 benchmark 场景已建立，见 [benchmark-05-multi-agent-decomposition.md](benchmarks/benchmark-05-multi-agent-decomposition.md)
-- 下一轮目标：把 4 个固定测例升级为 baseline + pairwise 记录，并开始用 [experiment-log-template.md](experiment-log-template.md) 跟踪迭代
+- 已新增一条 runtime smoke validation sample，见 [run-06-runtime-memory-smoke-test.md](benchmarks/runs/run-06-runtime-memory-smoke-test.md)
+- 下一轮目标：把固定测例升级为 baseline + pairwise + runtime provenance 记录，并开始用 [experiment-log-template.md](experiment-log-template.md) 跟踪迭代

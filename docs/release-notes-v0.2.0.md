@@ -2,131 +2,123 @@
 
 Status: `Draft`
 
-Date: `2026-04-11`
+Date: `2026-04-16`
 
 Current release truth lives in [release-manifest.md](release-manifest.md).
 
 ## Release Thesis
 
-`v0.2.0` 不是一次“补更多概念”的版本，而是一次把 `ai-native-loop` 从协议层推进到执行层、验证层和初步复利层的版本。
+`v0.2.0` 不是一次“补更多概念”的版本，而是一次把 `ai-native-loop` 从协议层推进到运行层、验证层和初步复利层的版本。
 
-这个版本真正修复的，不是单个文档缺失，而是三类高频失败：
+这个版本真正修复的，不是单个文档缺失，而是四类高频失败：
 
 - 协议存在，但没有最小完备动作集
 - 任务做完了，但失败模式无法沉淀
-- 案例存在，但经验不能稳定进入下一轮系统
+- recovery block 存在，但经验不会默认进入下一轮系统
+- 首页和路由承诺强于可验证证据
 
 ## What Changed
 
-### 1. The Skill Now Has Four Stable Operating Primitives
+### 1. The Skill Now Has A Local Runtime Memory Layer
 
-新增并接入四个稳定工件：
+本轮最关键的升级，不是再多一个文档，而是把经验沉淀推进到本地 skill 目录中的 runtime 层。
 
-- `Diagnosis Card`
-- `Task Packet`
-- `Feedback Attribution Card`
-- `Re-input Packet`
+当前默认宿主：
 
-这让 `ai-native-loop` 不再只是解释工作流，而能把介入收敛到固定输出形状。
+- `~/.codex/skills/ai-native-loop/runtime/`
 
-核心文件：
+新增内容：
 
-- [core-operating-primitives.md](../references/core-operating-primitives.md)
-
-### 2. Failure Modes Are Now Explicit
-
-新增失败模式层，把常见误判从隐性经验改成显式纠偏规则。
-
-这意味着系统开始围绕失败迭代，而不只是围绕“还能补什么内容”迭代。
+- runtime capture 目录结构
+- runtime manifest
+- review queue
+- promoted field note 分层
+- runtime helper scripts
 
 核心文件：
 
-- [failure-modes.md](../references/failure-modes.md)
-
-### 3. Experience Now Has A Promotion Path
-
-这个版本补了最关键的复利骨架：
-
-- case
-- field note
-- pattern
-- failure mode
-- benchmark
-
-它还不是全自动系统，但已经不再只有作者手工写总结这一条路。
-
-核心文件：
-
+- [runtime-memory-spec.md](runtime-memory-spec.md)
+- [runtime-promotion-policy.md](runtime-promotion-policy.md)
 - [experience-compounding-loop.md](../references/experience-compounding-loop.md)
-- [field-note-template.md](field-note-template.md)
-- [pattern-intake-template.md](../patterns/pattern-intake-template.md)
 
-### 4. Multi-Agent Support Moved From Template To Rule Layer
+### 2. Medium-Plus Interventions Now Require Local Capture
 
-此前仓库只有多 Agent handoff 模板。
+此前中介入以上任务只要求输出末尾保留 `Loop Recovery Block`。
 
-`v0.2.0` 开始把这块写成规则层：
+现在规则更硬：
 
-- 什么时候该拆
-- 什么时候不该拆
-- 子 agent 最小输入包是什么
-- 主 agent 必须保留什么
-- handoff artifact 应如何统一
+- 主输出末尾保留 `Loop Recovery Block`
+- 同结构内容写入本地 runtime capture
+- 如果当前环境无法写入，必须明确说明未完成 runtime capture
 
-核心文件：
+这意味着“经验进入系统”不再只是叙述，而是有了默认宿主。
 
-- [multi-agent-decomposition.md](../references/multi-agent-decomposition.md)
-- [multi-agent-decomposition.md](../patterns/multi-agent-decomposition.md)
-- [benchmark-05-multi-agent-decomposition.md](benchmarks/benchmark-05-multi-agent-decomposition.md)
+### 3. Invocation Contract Is Now Narrower
+
+本轮收紧了调用契约：
+
+- 显式调用优先
+- 不把隐式调用当作稳定承诺
+- 增加 `Minimum Pass Contract`
+- 增加 provisional packet 协议
+- 增加 `light / medium / strong` 输出预算
+
+这一步的目标不是把 skill 做小，而是减少误触发和形式主义输出。
+
+### 4. Validation Now Requires Runtime Provenance
+
+benchmark 与实验模板从本轮开始不只比较 baseline / candidate，还要求记录：
+
+- runtime capture 是否写入
+- runtime capture 引用是什么
+- 下一轮是否真的复用了 runtime 经验
+
+这让“经验会进入下一轮系统”开始有了更硬的验证入口。
+
+### 5. First-Run Packaging Now Matches The Real Mechanism
+
+README 和兼容文档已经不再把这个 skill 表达成“只靠 recovery block 自然复利”的系统，而是明确区分：
+
+- 本地 runtime 层
+- 仓库公开资产层
+- 推荐使用方式
+- 当前证据边界
 
 ## Validation
 
-本版本目前具备以下验证证据：
+本版本当前具备以下验证基础：
 
-- 4 个固定 benchmark 的 retrospective 记录已迁移到统一格式
-- 汇总平均分 `4.70`
-- `reinput_quality` 平均分 `4.63`
-- 当前最弱场景已明确为决策整理
-- baseline + pairwise 重跑入口已经建立，但尚未补齐
+- 4 个固定 benchmark 的统一矩阵
+- baseline + pairwise 评估模板
+- runtime provenance 字段
+- runtime helper scripts
+- smoke test 入口
+- 一条 bootstrap runtime memory smoke validation sample
 
-验证文件：
+当前仍未完成：
 
-- [benchmark-matrix.md](benchmark-matrix.md)
-- [benchmark-results-v0.2.0.md](benchmark-results-v0.2.0.md)
-- [benchmark-run-template.md](benchmarks/benchmark-run-template.md)
-- [runs/README.md](benchmarks/runs/README.md)
-
-## Demonstration Chain Added In This Draft
-
-为了避免经验复利层停留在抽象描述，本轮额外补了一条真实示范链：
-
-- Field note: [field-note-01-decision-structuring-skincare.md](field-notes/field-note-01-decision-structuring-skincare.md)
-- Pattern: [decision-structuring.md](../patterns/decision-structuring.md)
-- Failure mode: [failure-modes.md](../references/failure-modes.md)
-- Benchmark: [benchmark-04-decision-structuring-skincare.md](benchmarks/benchmark-04-decision-structuring-skincare.md)
-
-这条链的意义不是多一个案例，而是证明：
-
-> 一次真实任务，现在已经可以从原始回收物被提升为 pattern、failure mode 和 benchmark 资产。
+- 全量 baseline 补跑
+- 多 Agent 实测证据
+- 足量 runtime reuse 样本
 
 ## What This Release Still Does Not Solve
 
 `v0.2.0` 仍未完全解决以下问题：
 
 - 经验沉淀仍然不是全自动
-- 多 Agent benchmark 仍只有固定场景，尚无实测结果
-- 决策整理仍是当前最弱项
-- README 还可以继续增强短促强辨识度的 before/after
-- baseline + pairwise 验证刚开始建立，尚未覆盖全部固定测例
+- runtime capture 仍需要当前运行环境允许文件写入
+- 多 Agent benchmark 仍缺公开实测结果
+- 外部用户是否会持续贡献有效经验，仍需真实使用验证
 
 ## Upgrade Guidance
 
 如果你已经在使用 `v0.1.0` 风格的 `ai-native-loop`，升级到 `v0.2.0` 后，建议默认这样用：
 
-1. 不直接问“给答案”，先让系统先出 `Diagnosis Card` 和 `Task Packet`
-2. 对中介入以上任务，默认先保留一个 `Loop Recovery Block`，只有值得沉淀时再扩成 field note
-3. 遇到重复问题时，先看它是不是已经能进入 failure mode
-4. 需要并行协作时，先过多 Agent 的 split / don't-split 规则
+1. 优先显式调用 `$ai-native-loop`
+2. 先出 `Diagnosis Card` 和 `Task Packet`
+3. 对中介入以上任务，默认写 runtime capture，而不只是在回答末尾留字
+4. 遇到重复问题时，先读相关 runtime 经验，再决定是否进入 pattern / failure mode
+5. 需要并行协作时，仍按多 Agent 规则层处理，但不要把它当作已充分验证的首页能力承诺
 
 ## Release Judgment
 
@@ -134,4 +126,4 @@ Current release truth lives in [release-manifest.md](release-manifest.md).
 
 如果 `v0.1.0` 证明了这个 Skill 值得公开发布，`v0.2.0` 的意义在于：
 
-> 它开始证明这个 Skill 可以围绕失败、证据和经验复利持续变强。
+> 它开始把经验复利从展示层资产推进成默认存在的本地运行层。
