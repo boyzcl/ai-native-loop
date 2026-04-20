@@ -1,22 +1,31 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
-from runtime_memory_lib import ensure_runtime_root
+from runtime_memory_lib import ensure_runtime_root, resolve_runtime_resolution
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Initialize ai-native-loop runtime memory directories.")
     parser.add_argument(
+        "--host",
+        default=None,
+        help="Host id used to resolve the runtime root. Examples: codex, claude-code, openclaw.",
+    )
+    parser.add_argument(
         "--root",
-        default="~/.codex/skills/ai-native-loop/runtime",
-        help="Runtime root directory. Default: ~/.codex/skills/ai-native-loop/runtime",
+        default=None,
+        help="Runtime root directory. Overrides host defaults and environment-based resolution.",
     )
     args = parser.parse_args()
 
-    result = ensure_runtime_root(Path(args.root))
-    print(f"initialized runtime root: {result['runtime_root']}")
+    resolution = resolve_runtime_resolution(host=args.host, root=args.root)
+    result = ensure_runtime_root(resolution.runtime_root, resolution)
+    print(
+        "initialized runtime root: "
+        f"{result['runtime_root']} "
+        f"(host={resolution.host_id}, source={resolution.source}, tier={resolution.support_tier})"
+    )
     return 0
 
 

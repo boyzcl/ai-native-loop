@@ -1,5 +1,7 @@
 # AI Native Loop Runtime Compounding Execution Plan
 
+> Historical note: this execution plan was written during the earlier Codex-first phase. Any path examples under `.codex` are historical snapshots, not the current cross-host support contract. Use [host-abstraction.md](host-abstraction.md) and [compatibility-matrix.md](compatibility-matrix.md) for the current truth.
+
 ## Objective
 
 把 `ai-native-loop` 从“有经验治理设计的协议型 skill”推进到“经验默认留存在本地 skill 目录、并能在下一次调用时进入迭代”的运行系统。

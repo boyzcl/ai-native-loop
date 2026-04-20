@@ -23,9 +23,15 @@ Current release truth lives in [release-manifest.md](release-manifest.md).
 
 本轮最关键的升级，不是再多一个文档，而是把经验沉淀推进到本地 skill 目录中的 runtime 层。
 
-当前默认宿主：
+当前默认 runtime root 已改为按 host 解析。
 
-- `~/.codex/skills/ai-native-loop/runtime/`
+本轮最小可信支持面：
+
+- `Codex`：`~/.codex/skills/ai-native-loop/runtime/`
+
+当前仅有适配草案：
+
+- `Claude Code`：`~/.claude/skills/ai-native-loop/runtime/`
 
 新增内容：
 

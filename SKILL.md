@@ -24,9 +24,28 @@ metadata:
 
 ## Runtime 宿主
 
-默认本地经验宿主为：
+协议层本身不绑定宿主；runtime 宿主需要按当前 host 解析。
 
-- `~/.codex/skills/ai-native-loop/runtime/`
+当前支持分层：
+
+- `Codex`：`officially supported`
+- `Claude Code`：`experimental`
+- `OpenClaw`：`experimental`
+- 其他宿主：`theoretically portable`
+
+默认 runtime root 解析顺序：
+
+1. 显式 `--root`
+2. `AI_NATIVE_LOOP_RUNTIME_ROOT`
+3. host 专属环境变量，例如 `AI_NATIVE_LOOP_CODEX_RUNTIME_ROOT`
+4. host home 环境变量，例如 `CODEX_HOME`
+5. host 默认路径约定
+
+当前路径约定：
+
+- `Codex` 默认：`~/.codex/skills/ai-native-loop/runtime/`
+- `Claude Code` 适配草案默认：`~/.claude/skills/ai-native-loop/runtime/`
+- `OpenClaw` 适配草案默认：`~/.openclaw/skills/ai-native-loop/runtime/`
 
 这个目录负责：
 
@@ -37,6 +56,7 @@ metadata:
 - `state/`：manifest 与 review 状态
 
 仓库工作副本不是默认 runtime 宿主。
+协议可迁移不等于宿主已支持；只有进入已声明支持层级的宿主，才能把默认路径和调用方式当作项目承诺。
 
 ## 触发总判断
 
@@ -136,7 +156,7 @@ metadata:
    - 对 `medium` 及以上任务，默认输出一个 `Loop Recovery Block`，并写入本地 runtime capture。
    - 最少记录：`scene`、`initial_block`、`artifacts_produced`、`what_worked`、`remaining_risk`、`next_input`。
    - 这个回收块默认放在本轮主输出的末尾，作为最后一个协议块，而不是散落在正文里。
-   - runtime capture 默认写入 `~/.codex/skills/ai-native-loop/runtime/captures/YYYY-MM-DD.jsonl`。
+   - runtime capture 默认写入当前宿主解析出的 `runtime_root/captures/YYYY-MM-DD.jsonl`。
    - 只有当样本值得沉淀时，再把 recovery block 扩成 field note。
    - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
 
@@ -150,6 +170,7 @@ metadata:
 - 没有越权替用户做不可逆判断
 - `medium+` 任务有明确 `next_input`
 - `medium+` 任务已写入 runtime capture，或明确说明为何未写入
+- 没有把“协议可迁移”误说成“宿主已支持”
 
 ## 信息不足时的协议
 

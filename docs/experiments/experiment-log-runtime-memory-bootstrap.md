@@ -1,5 +1,7 @@
 # Experiment Log: Runtime Memory Bootstrap
 
+> Historical note: this log captures an earlier Codex-hosted run. The `.codex` runtime path below is evidence for that run, not the current generic host contract.
+
 ## Hypothesis
 
 - 把 `medium+` 任务的经验默认写入本地 runtime capture 后，`ai-native-loop` 的“经验进入下一轮系统”将从叙述变成可验证机制。

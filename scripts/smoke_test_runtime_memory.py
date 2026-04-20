@@ -4,13 +4,21 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from runtime_memory_lib import append_capture, ensure_runtime_root, read_recent_captures, validate_runtime_root
+from runtime_memory_lib import (
+    append_capture,
+    enrich_capture_record,
+    ensure_runtime_root,
+    read_recent_captures,
+    resolve_runtime_resolution,
+    validate_runtime_root,
+)
 
 
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="ai-native-loop-runtime-") as temp_dir:
-        runtime_root = Path(temp_dir)
-        ensure_runtime_root(runtime_root)
+        resolution = resolve_runtime_resolution(host="claude-code", root=temp_dir)
+        runtime_root = resolution.runtime_root
+        ensure_runtime_root(runtime_root, resolution)
 
         record = {
             "timestamp": datetime.now().astimezone().isoformat(),
@@ -34,6 +42,7 @@ def main() -> int:
             "promotion_hint": "review_for_field_note",
         }
 
+        record = enrich_capture_record(record, resolution)
         append_capture(runtime_root, record)
         errors = validate_runtime_root(runtime_root)
         if errors:
@@ -46,7 +55,13 @@ def main() -> int:
             print("failed to retrieve smoke test capture by scene")
             return 1
 
-        print(f"smoke test passed: {runtime_root}")
+        manifest = runtime_root / "state" / "runtime-memory-manifest.json"
+        manifest_text = manifest.read_text(encoding="utf-8")
+        if '"runtime_host": "claude-code"' not in manifest_text:
+            print("runtime manifest did not record the resolved host")
+            return 1
+
+        print(f"smoke test passed: {runtime_root} (host={resolution.host_id}, source={resolution.source})")
         return 0
 
 

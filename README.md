@@ -2,6 +2,11 @@
 
 `ai-native-loop` 是一个协议型工作流 Skill。
 
+它现在把两层东西分开维护：
+
+- 宿主无关的闭环协议
+- 宿主相关的 runtime / invocation / metadata 适配
+
 它解决的不是“再给我一个答案”，而是：
 
 - 输入太乱，当前轮任务包不清楚
@@ -23,10 +28,14 @@
 
 ### Install
 
+官方支持面的快速安装先以 `Codex` 为准：
+
 ```bash
 git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
-python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
+python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py --host codex
 ```
+
+如果你不在 `Codex` 宿主里，先看 [compatibility-and-invocation.md](docs/compatibility-and-invocation.md) 和 [compatibility-matrix.md](docs/compatibility-matrix.md)，再用 `--host` 或 `--root` 初始化 runtime。
 
 ### Use It Explicitly
 
@@ -48,9 +57,11 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
 - `Re-input Packet`
 - `Loop Recovery Block`
 
-对 `medium` 及以上介入，默认还应把这轮结构化经验写入：
+对 `medium` 及以上介入，默认还应把这轮结构化经验写入当前宿主解析出的 runtime root：
 
-- `~/.codex/skills/ai-native-loop/runtime/captures/`
+- `Codex` 默认：`~/.codex/skills/ai-native-loop/runtime/captures/`
+- `Claude Code` 适配草案默认：`~/.claude/skills/ai-native-loop/runtime/captures/`
+- 任意宿主都可被 `AI_NATIVE_LOOP_RUNTIME_ROOT` 或 `--root` 覆盖
 
 ## When To Use
 
@@ -80,7 +91,7 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
 - 下一次调用时只按需读取少量相关经验
 - 值得提升的样本再进入 field note / pattern / failure mode / benchmark
 
-运行时规格见 [runtime-memory-spec.md](docs/runtime-memory-spec.md)。
+运行时规格见 [runtime-memory-spec.md](docs/runtime-memory-spec.md)，四层拆分见 [host-abstraction.md](docs/host-abstraction.md)。
 
 ## Before / After
 
@@ -97,10 +108,14 @@ After：
 当前推荐使用方式与已验证前提见：
 
 - [compatibility-and-invocation.md](docs/compatibility-and-invocation.md)
+- [compatibility-matrix.md](docs/compatibility-matrix.md)
 
 一句话版本：
 
-- 推荐环境：本地 Codex skill 宿主，且有文件系统写权限
+- `Codex`：`officially supported`
+- `Claude Code`：`experimental`
+- `OpenClaw`：`experimental`
+- 其他宿主：`theoretically portable`
 - 推荐触发方式：显式调用 `$ai-native-loop`
 - 当前不推荐把隐式触发当作稳定能力承诺
 
@@ -123,6 +138,8 @@ After：
 
 - 版本与状态单一事实源： [release-manifest.md](docs/release-manifest.md)
 - Skill 结构图： [skill-architecture.md](docs/skill-architecture.md)
+- 宿主抽象与四层拆分： [host-abstraction.md](docs/host-abstraction.md)
+- 兼容矩阵： [compatibility-matrix.md](docs/compatibility-matrix.md)
 - 运行时经验层规格： [runtime-memory-spec.md](docs/runtime-memory-spec.md)
 - 运行时晋升策略： [runtime-promotion-policy.md](docs/runtime-promotion-policy.md)
 - 触发边界与回归集： [trigger-examples.md](docs/trigger-examples.md), [trigger-regression-suite.md](docs/trigger-regression-suite.md)
@@ -133,7 +150,7 @@ After：
 
 ## Runtime Helpers
 
-本轮新增了最小 runtime helper scripts：
+本轮新增的 runtime helper scripts 已统一支持 `--host` / `--root`：
 
 - `scripts/init_runtime_memory.py`
 - `scripts/validate_runtime_memory.py`
@@ -148,6 +165,7 @@ After：
 - 用临时目录跑一轮端到端 smoke test
 - 把一条结构化记录追加到本地 runtime capture
 - 按 `scene` 读取最近的 runtime 经验
+- 根据宿主、环境变量和显式参数解析默认 runtime root
 
 ## Feedback Loop
 
@@ -164,6 +182,8 @@ repo 侧已经补了最小反馈入口：
 如果你第一次看这个仓库，最值得先读的是这些文件：
 
 - [SKILL.md](SKILL.md)
+- [docs/host-abstraction.md](docs/host-abstraction.md)
+- [docs/compatibility-matrix.md](docs/compatibility-matrix.md)
 - [docs/runtime-memory-spec.md](docs/runtime-memory-spec.md)
 - [docs/runtime-promotion-policy.md](docs/runtime-promotion-policy.md)
 - [references/core-operating-primitives.md](references/core-operating-primitives.md)

@@ -1,27 +1,36 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
-from runtime_memory_lib import validate_runtime_root
+from runtime_memory_lib import resolve_runtime_resolution, validate_runtime_root
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate ai-native-loop runtime memory structure.")
     parser.add_argument(
+        "--host",
+        default=None,
+        help="Host id used to resolve the runtime root. Examples: codex, claude-code, openclaw.",
+    )
+    parser.add_argument(
         "--root",
-        default="~/.codex/skills/ai-native-loop/runtime",
-        help="Runtime root directory. Default: ~/.codex/skills/ai-native-loop/runtime",
+        default=None,
+        help="Runtime root directory. Overrides host defaults and environment-based resolution.",
     )
     args = parser.parse_args()
 
-    errors = validate_runtime_root(Path(args.root))
+    resolution = resolve_runtime_resolution(host=args.host, root=args.root)
+    errors = validate_runtime_root(resolution.runtime_root)
     if errors:
         for error in errors:
             print(error)
         return 1
 
-    print(f"runtime memory is valid: {Path(args.root).expanduser()}")
+    print(
+        "runtime memory is valid: "
+        f"{resolution.runtime_root} "
+        f"(host={resolution.host_id}, source={resolution.source}, tier={resolution.support_tier})"
+    )
     return 0
 
 

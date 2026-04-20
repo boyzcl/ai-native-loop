@@ -1,0 +1,8 @@
+interface:
+  display_name: "AI Native Loop"
+  short_description: "Use when the blocker is a broken collaboration loop, not a missing one-shot answer"
+  default_prompt: "Use $ai-native-loop when the user explicitly asks for it or when you have already determined the real blocker is a broken collaboration loop. Keep the protocol host-aware: preserve clear decision boundaries, produce Diagnosis Card and Task Packet first, and for medium-plus tasks write the recovery block to the resolved local runtime root for the current host. For OpenClaw, the default runtime convention is ~/.openclaw/skills/ai-native-loop/runtime/ unless AI_NATIVE_LOOP_RUNTIME_ROOT or an explicit root overrides it. This adapter is experimental until end-to-end host validation exists."
+
+policy:
+  allow_implicit_invocation: false
+  support_tier: experimental

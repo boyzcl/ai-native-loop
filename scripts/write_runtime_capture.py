@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from runtime_memory_lib import append_capture
+from runtime_memory_lib import append_capture, enrich_capture_record, resolve_runtime_resolution
 
 
 def main() -> int:
@@ -15,15 +15,22 @@ def main() -> int:
         help="Path to a JSON file containing one capture record.",
     )
     parser.add_argument(
+        "--host",
+        default=None,
+        help="Host id used to resolve the runtime root. Examples: codex, claude-code, openclaw.",
+    )
+    parser.add_argument(
         "--root",
-        default="~/.codex/skills/ai-native-loop/runtime",
-        help="Runtime root directory. Default: ~/.codex/skills/ai-native-loop/runtime",
+        default=None,
+        help="Runtime root directory. Overrides host defaults and environment-based resolution.",
     )
     args = parser.parse_args()
 
     record_path = Path(args.record_file).expanduser()
     record = json.loads(record_path.read_text(encoding="utf-8"))
-    capture_path = append_capture(Path(args.root), record)
+    resolution = resolve_runtime_resolution(host=args.host, root=args.root)
+    record = enrich_capture_record(record, resolution)
+    capture_path = append_capture(resolution.runtime_root, record)
     print(capture_path)
     return 0
 

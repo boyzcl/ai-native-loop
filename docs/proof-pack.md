@@ -10,10 +10,14 @@
 
 ## Install
 
+当前最小可信安装路径先以 `Codex` 为准：
+
 ```bash
 git clone https://github.com/boyzcl/ai-native-loop.git ~/.codex/skills/ai-native-loop
-python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
+python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py --host codex
 ```
+
+如果你在其他宿主下验证，必须显式写出 `--host` 或 `--root`，不要默认把 `.codex` 路径当成通用事实。
 
 ## Trigger
 
@@ -31,9 +35,10 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
 
 ## Expected Runtime Artifact
 
-写入：
+写入当前宿主解析出的 runtime root，例如：
 
-- `~/.codex/skills/ai-native-loop/runtime/captures/YYYY-MM-DD.jsonl`
+- `Codex`：`~/.codex/skills/ai-native-loop/runtime/captures/YYYY-MM-DD.jsonl`
+- `Claude Code` 草案：`~/.claude/skills/ai-native-loop/runtime/captures/YYYY-MM-DD.jsonl`
 
 记录最少应包含：
 
@@ -47,13 +52,13 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py
 一个最小 CLI 写入例子：
 
 ```bash
-python3 ~/.codex/skills/ai-native-loop/scripts/write_runtime_capture.py --record-file /path/to/capture.json
+python3 ~/.codex/skills/ai-native-loop/scripts/write_runtime_capture.py --host codex --record-file /path/to/capture.json
 ```
 
 一个最小 CLI 读取例子：
 
 ```bash
-python3 ~/.codex/skills/ai-native-loop/scripts/read_runtime_context.py --scene research-to-report --limit 3
+python3 ~/.codex/skills/ai-native-loop/scripts/read_runtime_context.py --host codex --scene research-to-report --limit 3
 ```
 
 ## Validation Path

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 
-from runtime_memory_lib import read_recent_captures
+from runtime_memory_lib import read_recent_captures, resolve_runtime_resolution
 
 
 def main() -> int:
@@ -21,13 +20,19 @@ def main() -> int:
         help="Maximum number of captures to return. Default: 5",
     )
     parser.add_argument(
+        "--host",
+        default=None,
+        help="Host id used to resolve the runtime root. Examples: codex, claude-code, openclaw.",
+    )
+    parser.add_argument(
         "--root",
-        default="~/.codex/skills/ai-native-loop/runtime",
-        help="Runtime root directory. Default: ~/.codex/skills/ai-native-loop/runtime",
+        default=None,
+        help="Runtime root directory. Overrides host defaults and environment-based resolution.",
     )
     args = parser.parse_args()
 
-    records = read_recent_captures(Path(args.root), scene=args.scene, limit=args.limit)
+    resolution = resolve_runtime_resolution(host=args.host, root=args.root)
+    records = read_recent_captures(resolution.runtime_root, scene=args.scene, limit=args.limit)
     print(json.dumps(records, ensure_ascii=True, indent=2))
     return 0
 

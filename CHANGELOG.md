@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Host abstraction document separating protocol / host / adapter / validation layers
+- Compatibility matrix with explicit support tiers for Codex, Claude Code, and future hosts
+- Claude Code adapter draft and agent metadata stub
 - Runtime memory specification separating local runtime storage from repository assets
 - Runtime promotion policy covering raw capture, review queue, promoted notes, and repo candidate gates
 - Compatibility and invocation guide documenting explicit invocation as the recommended path
@@ -14,6 +17,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Runtime helper scripts now resolve runtime roots through host-aware defaults plus explicit overrides
+- README, SKILL, and runtime docs now distinguish protocol portability from actual host support
 - `medium+` interventions now require a local runtime capture in addition to the response-tail recovery block
 - Agent metadata now disables implicit invocation by default
 - README now describes the skill as local-first runtime compounding, not repo-only experience capture

@@ -8,9 +8,21 @@
 
 ## Host Path
 
-默认宿主：
+runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 
-- `~/.codex/skills/ai-native-loop/runtime/`
+解析顺序：
+
+1. 显式 `--root`
+2. `AI_NATIVE_LOOP_RUNTIME_ROOT`
+3. host 专属环境变量，例如 `AI_NATIVE_LOOP_CODEX_RUNTIME_ROOT`
+4. host home 环境变量，例如 `CODEX_HOME`
+5. host 默认路径约定
+
+当前路径约定：
+
+- `Codex`：`~/.codex/skills/ai-native-loop/runtime/`
+- `Claude Code`：`~/.claude/skills/ai-native-loop/runtime/`
+- `OpenClaw`：`~/.openclaw/skills/ai-native-loop/runtime/`
 
 仓库工作副本不是默认 runtime 宿主。
 
@@ -56,6 +68,7 @@
 2. 同结构内容写入 runtime capture
 
 如果当前环境无法写入本地文件，必须明确说明未完成 runtime capture。
+如果当前宿主只处于 `experimental` 或 `theoretically portable`，也不能把默认路径约定说成已验证事实。
 
 ## Read Rule
 
@@ -85,13 +98,13 @@
 ## Helper Scripts
 
 - `scripts/init_runtime_memory.py`
-  - 初始化 runtime 目录和 bootstrap 文件
+  - 初始化 runtime 目录和 bootstrap 文件，支持 `--host` / `--root`
 - `scripts/validate_runtime_memory.py`
   - 检查目录结构、JSON 文件和 capture schema
 - `scripts/smoke_test_runtime_memory.py`
-  - 用临时目录跑一轮端到端 smoke test
+  - 用临时目录跑一轮端到端 smoke test，并校验 host-aware manifest
 - `scripts/write_runtime_capture.py`
-  - 读取一条 JSON 记录并追加到 runtime capture
+  - 读取一条 JSON 记录并追加到 runtime capture，同时补 runtime host 信息
 - `scripts/read_runtime_context.py`
   - 按 `scene` 读取最近 captures，供下一轮调用前预读取
 

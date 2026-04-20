@@ -1,5 +1,7 @@
 # Benchmark Run: runtime-memory-smoke-test
 
+> Historical note: this benchmark run records a Codex-hosted validation sample. The `.codex` runtime reference below is provenance for that dated run, not the current cross-host contract.
+
 ## Scenario
 
 - benchmark_ref: runtime-memory-smoke-test

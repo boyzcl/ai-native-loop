@@ -1,6 +1,6 @@
 # Release Manifest
 
-Updated: `2026-04-16`
+Updated: `2026-04-20`
 
 ## Purpose
 
@@ -39,9 +39,16 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 
 ## Runtime Source Of Truth
 
-默认运行时经验层宿主：
+默认运行时经验层宿主改为“按 host 解析的 runtime root”。
 
-- `~/.codex/skills/ai-native-loop/runtime/`
+当前最小可信支持面：
+
+- `Codex`：`~/.codex/skills/ai-native-loop/runtime/`
+
+当前仅有适配草案，不构成完全支持承诺：
+
+- `Claude Code`：`~/.claude/skills/ai-native-loop/runtime/`
+- `OpenClaw`：`~/.openclaw/skills/ai-native-loop/runtime/`
 
 仓库不作为默认 runtime 存储层，只作为公开定义、验证与发布层。
 

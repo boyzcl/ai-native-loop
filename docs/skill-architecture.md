@@ -247,3 +247,18 @@
    - 让 Agent 更容易在一次加载里读到
 3. 给触发回归集补一个自动化执行 harness
    - 把“规则存在”推进到“规则可反复检验”
+
+## Host-Aware Rewrite
+
+如果从“支持多个 agent 宿主”的问题来切，这个仓库现在推荐再用一套四层视角阅读：
+
+1. `协议层`
+   - Skill 核心协议与工件，不绑定宿主
+2. `宿主层`
+   - runtime root、文件系统假设、调用前提
+3. `适配层`
+   - `agents/*.yaml` 这样的宿主 metadata
+4. `验证层`
+   - 兼容矩阵、helper scripts、smoke test、runtime provenance
+
+这套四层拆分的详细定义见 [host-abstraction.md](host-abstraction.md)。

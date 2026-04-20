@@ -23,9 +23,11 @@
 
 ### 1. Runtime Layer
 
-默认宿主：
+runtime root 按宿主解析，当前路径约定：
 
-- `~/.codex/skills/ai-native-loop/runtime/`
+- `Codex`：`~/.codex/skills/ai-native-loop/runtime/`
+- `Claude Code`：`~/.claude/skills/ai-native-loop/runtime/`
+- `OpenClaw`：`~/.openclaw/skills/ai-native-loop/runtime/`
 
 负责：
 
@@ -51,6 +53,8 @@
 原则：
 
 > 先在 runtime 层默认积累，再决定哪些经验值得进入 repo 层。
+
+这不代表所有宿主都已支持；只有通过 compatibility matrix 声明的宿主，才能把默认路径当作当前承诺。
 
 ## Default Loop
 
