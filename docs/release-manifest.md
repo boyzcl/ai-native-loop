@@ -11,15 +11,15 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 ## Current Release Truth
 
 - `public_version`
-  - `v0.1.0`
+  - `v0.2.0`
 - `public_skill_metadata_version`
-  - `0.1.0`
+  - `0.2.0`
 - `active_iteration_track`
   - `v0.2.0`
 - `track_status`
-  - `draft / local auto-promotion + capacity governance + validated retrieval + repo-candidate review workflow`
+  - `published / local auto-promotion + capacity governance + validated retrieval + repo-candidate review workflow`
 - `release_judgment`
-  - `v0.2.0` 已完成 runtime memory 骨架、本地 auto-promotion、capacity governance、reuse 观测、repo candidate review workflow、retrieval forward test 与 backlog stress replay；但这些仍主要是本地与 temp-runtime 证据，尚不能过度承诺长期稳定自治或正式发布
+  - `v0.2.0` 已完成 runtime memory 骨架、本地 auto-promotion、capacity governance、reuse 观测、repo candidate review workflow、retrieval forward test 与 backlog stress replay，已达到当前公开版本发布门槛；但这些仍主要是本地与 temp-runtime 证据，不应过度承诺长期稳定自治
 
 ## Canonical References
 
@@ -64,3 +64,24 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 - 对应 release notes 的状态字段
 - benchmark 与验证文档是否匹配当前发布判断
 - runtime 相关文档与 helper scripts 是否匹配当前声明
+
+## Version Push Rule
+
+从 `2026-04-21` 起，任何“准备 push 到 GitHub 并作为一个新仓库版本对外表达”的变更，都必须先同步以下版本真相：
+
+- `docs/release-manifest.md`
+- `README.md`
+- `SKILL.md` metadata version
+- `CHANGELOG.md`
+- 对应版本的 release notes
+
+执行要求：
+
+1. 先更新版本号与发布状态
+2. 再运行 `scripts/check-release-consistency.sh`
+3. 通过后才允许 push 这个版本对应的 GitHub 提交
+
+默认规则：
+
+- push 普通开发提交，不强制改 semver
+- push 一个明确对外表达的新版本时，必须同步版本号，不能只改代码不改版本真相

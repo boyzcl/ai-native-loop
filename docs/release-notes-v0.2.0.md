@@ -1,8 +1,8 @@
 # Release Notes v0.2.0
 
-Status: `Draft`
+Status: `Published`
 
-Date: `2026-04-16`
+Date: `2026-04-21`
 
 Current release truth lives in [release-manifest.md](release-manifest.md).
 
@@ -115,6 +115,14 @@ README 和兼容文档已经不再把这个 skill 表达成“只靠 recovery bl
 - runtime capture 仍需要当前运行环境允许文件写入
 - 多 Agent benchmark 仍缺公开实测结果
 - 外部用户是否会持续贡献有效经验，仍需真实使用验证
+
+## Release Boundary
+
+`v0.2.0` 现在已经作为仓库当前公开版本发布，但发布口径仍然要保持克制：
+
+- 可以说：本地自动晋升、容量治理、retrieval forward test、repo candidate review workflow 已接通
+- 不应说：长期稳定自治已经被长期真实世界样本充分证明
+- repo candidate 仍然不是 repo asset 自动发布层
 
 ## Upgrade Guidance
 

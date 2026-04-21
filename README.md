@@ -21,8 +21,8 @@
 ## Release Status
 
 - Release truth: [release-manifest.md](docs/release-manifest.md)
-- Current public version: `v0.1.0`
-- Current iteration track: `v0.2.0` draft / runtime compounding + validation hardening
+- Current public version: `v0.2.0`
+- Current iteration track: `v0.2.0` published / local auto-promotion + capacity governance + validated retrieval + repo-candidate review workflow
 
 ## 60-Second Start
 

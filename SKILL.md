@@ -3,7 +3,7 @@ name: ai-native-loop
 description: 当用户卡住的根因不是“缺一个答案”，而是输入混乱、执行漂移、输出难评估或反馈进不了下一轮时使用。把当前工作重写成可持续推进的 ai native 闭环。当前版本优先显式调用，适用于研究、写作、产品思考、决策推进与多轮任务推进。
 metadata:
   short-description: 用 ai native 闭环重写知识工作
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # ai-native-loop

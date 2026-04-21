@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- Any GitHub-pushed repository version must now sync `release-manifest.md`, `README.md`, `SKILL.md` metadata, `CHANGELOG.md`, and the matching release notes before push
+- `scripts/check-release-consistency.sh` is now the required pre-push guard for version-truth synchronization
+
+## v0.2.0 - 2026-04-21
+
 ### Added
 
 - Host abstraction document separating protocol / host / adapter / validation layers
