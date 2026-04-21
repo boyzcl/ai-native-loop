@@ -1,6 +1,6 @@
 # Release Manifest
 
-Updated: `2026-04-20`
+Updated: `2026-04-21`
 
 ## Purpose
 
@@ -17,9 +17,9 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 - `active_iteration_track`
   - `v0.2.0`
 - `track_status`
-  - `draft / runtime compounding + validation hardening`
+  - `draft / local auto-promotion + capacity governance + validated retrieval + repo-candidate review workflow`
 - `release_judgment`
-  - `v0.2.0` 已完成执行层、模式层、初始 benchmark、runtime memory 骨架与首轮调用收紧，但验证体系仍在加固，尚未正式发布
+  - `v0.2.0` 已完成 runtime memory 骨架、本地 auto-promotion、capacity governance、reuse 观测、repo candidate review workflow、retrieval forward test 与 backlog stress replay；但这些仍主要是本地与 temp-runtime 证据，尚不能过度承诺长期稳定自治或正式发布
 
 ## Canonical References
 
@@ -30,12 +30,14 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 
 ## Current Decision
 
-当前迭代重点不是继续扩写概念，而是补四类发布前缺口：
+当前迭代重点已经从“把 runtime compounding 接通”切换为“让受限复利变得可验证、可 review、可长期维护”。
 
-1. 验证体系从回放式 benchmark 升级为 baseline + pairwise rubric + runtime provenance + experiment log
-2. `medium` 以上任务默认保留最小回收块并写入本地 runtime capture
-3. README 与 agent metadata 优先优化首次试用路径并收紧为显式调用优先
-4. 版本叙事开始围绕 failure correction 与 runtime compounding，而不是只围绕新增文件
+当前优先级：
+
+1. 继续积累更长周期的真实 reuse 样本，确认 retrieval heuristic 在真实任务里仍稳定
+2. 继续用 `pending / accepted / rejected` review workflow 管住 repo candidate，不把它误当成自动发布层
+3. 只在有足够 review 与 drafting 证据时，才把单个 accepted candidate 转成 repo 层公共资产
+4. 继续保持 repo 层 gate，不把本地候选层误当成自动发布层
 
 ## Runtime Source Of Truth
 

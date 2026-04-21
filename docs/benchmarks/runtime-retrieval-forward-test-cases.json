@@ -1,0 +1,79 @@
+[
+  {
+    "id": "repo_candidate_review_workflow",
+    "query": "repo candidate review workflow pending accepted rejected criteria",
+    "expected_any": [
+      "assess-auto-promotion-governance-state-and-decide-the-next-validation-lo",
+      "implement-local-auto-promotion-worker-with-bounded-repo-candidate-gate-a",
+      "harden-local-auto-promotion-with-reuse-ledger-stricter-repo-candidate-ga"
+    ],
+    "must_not_contain": [
+      "good-photo-standard-checkpoint-freeze-before-next-loop",
+      "repo-closeout-git-push"
+    ]
+  },
+  {
+    "id": "retrieval_quality_forward_test",
+    "query": "retrieval quality forward test false positive false negative heuristic tighten",
+    "expected_any": [
+      "assess-auto-promotion-governance-state-and-decide-the-next-validation-lo",
+      "harden-local-auto-promotion-with-reuse-ledger-stricter-repo-candidate-ga",
+      "implement-local-auto-promotion-worker-with-bounded-repo-candidate-gate-a"
+    ],
+    "must_not_contain": [
+      "good-photo-standard-checkpoint-freeze-before-next-loop"
+    ]
+  },
+  {
+    "id": "backlog_pressure_validation",
+    "query": "larger backlog longer cycle pressure test promoted working set archive merge rate candidate count",
+    "expected_any": [
+      "assess-auto-promotion-governance-state-and-decide-the-next-validation-lo",
+      "document-auto-promotion-diagnosis-and-execution-plan-for-bounded-long-te",
+      "implement-local-auto-promotion-worker-with-bounded-repo-candidate-gate-a"
+    ],
+    "must_not_contain": [
+      "repo-closeout-git-push"
+    ]
+  },
+  {
+    "id": "host_aware_runtime_root",
+    "query": "host aware runtime root codex claude code openclaw support tier",
+    "expected_any": [
+      "reframe-codex-first-skill-into-multi-agent-compatible-operating-plan"
+    ],
+    "expected_top": "reframe-codex-first-skill-into-multi-agent-compatible-operating-plan",
+    "must_not_contain": [
+      "repo-closeout-git-push",
+      "document-auto-promotion-diagnosis-and-execution-plan-for-bounded-long-te"
+    ]
+  },
+  {
+    "id": "photo_checkpoint_freeze",
+    "query": "good photo standard freeze checkpoint before next retuning",
+    "expected_any": [
+      "good-photo-standard-checkpoint-freeze-before-next-loop",
+      "good-photo-standard-variance-attribution-before-retuning"
+    ],
+    "expected_top": "good-photo-standard-checkpoint-freeze-before-next-loop"
+  },
+  {
+    "id": "repo_closeout",
+    "query": "git push repo closeout after delivery",
+    "expected_any": [
+      "repo-closeout-git-push"
+    ],
+    "expected_top": "repo-closeout-git-push",
+    "must_not_contain": [
+      "good-photo-standard-checkpoint-freeze-before-next-loop"
+    ]
+  },
+  {
+    "id": "runtime_memory_smoke_test",
+    "query": "runtime memory smoke test bootstrap cli sample",
+    "expected_any": [
+      "runtime-memory-smoke-test"
+    ],
+    "expected_top": "runtime-memory-smoke-test"
+  }
+]

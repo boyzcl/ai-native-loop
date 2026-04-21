@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from collections import Counter
 import json
 from dataclasses import dataclass
 from datetime import datetime
+import math
 import os
 from pathlib import Path
+import re
 from typing import Iterable
 
 
@@ -18,6 +21,7 @@ RUNTIME_SUBDIRS = [
     "inbox",
     "promoted/field-notes",
     "promoted/archive",
+    "promoted/repo-candidates",
     "state",
 ]
 
@@ -37,6 +41,31 @@ REQUIRED_CAPTURE_FIELDS = [
     "candidate_failure_tags",
     "promotion_hint",
 ]
+
+PROMOTED_NOTE_TOKEN_RE = re.compile(r"[a-z0-9][a-z0-9_-]+")
+PROMOTED_NOTE_STOPWORDS = {
+    "after",
+    "and",
+    "before",
+    "current",
+    "field",
+    "for",
+    "from",
+    "into",
+    "loop",
+    "next",
+    "note",
+    "runtime",
+    "task",
+    "the",
+    "this",
+    "with",
+}
+PROMOTED_RETRIEVAL_WEIGHT_FLOOR = 0.24
+RETRIEVAL_EXCLUDED_SECTION_TITLES = {
+    "source runtime captures",
+    "merge history",
+}
 
 
 @dataclass(frozen=True)
@@ -193,6 +222,7 @@ def default_manifest(runtime_root: Path, resolution: RuntimeResolution | None = 
         "capture_policy": "medium_plus_write_local_capture",
         "last_review_at": None,
         "notes": "runtime layer stores local experience; repository remains the public validation layer",
+        "promotion_governance": "local_auto_promotion_repo_candidate_gated",
     }
     if resolution is not None:
         manifest.update(
@@ -204,6 +234,67 @@ def default_manifest(runtime_root: Path, resolution: RuntimeResolution | None = 
             }
         )
     return manifest
+
+
+def default_promotion_policy() -> dict:
+    return {
+        "version": 1,
+        "backlog_threshold": 10,
+        "default_batch_size": 5,
+        "promoted_working_set_ceiling": 20,
+        "max_raw_reads": 5,
+        "max_promoted_reads": 3,
+        "max_reference_reads": 2,
+        "max_reviewed_history": 200,
+        "dedup_similarity_threshold": 0.52,
+        "merge_similarity_threshold": 0.36,
+        "keep_raw_max_score": 2,
+        "promote_min_score": 3,
+        "repo_candidate_min_score": 4,
+        "repo_candidate_gate_min": 2,
+        "repo_candidate_require_repeat_or_reuse": True,
+        "repo_candidate_min_reuse_count": 2,
+        "repo_candidate_min_source_sessions": 2,
+        "reuse_history_limit": 500,
+        "archive_keywords": [
+            "smoke test",
+            "smoke-test",
+            "bootstrap",
+            "cli sample",
+        ],
+        "scoring": {
+            "repeat_signal": 2,
+            "transfer_signal": 1,
+            "specificity_signal": 1,
+            "future_judgment_signal": 1,
+            "benchmark_signal": 1,
+        },
+        "notes": (
+            "Promotion stays local by default. Repo candidates require stronger evidence, "
+            "while dedup, archive, and ceilings apply before new note creation."
+        ),
+    }
+
+
+def default_promotion_ledger() -> dict:
+    return {
+        "version": 1,
+        "created_at": datetime.now().astimezone().isoformat(),
+        "updated_at": None,
+        "last_run_id": None,
+        "runs": [],
+        "note_stats": {},
+    }
+
+
+def default_reuse_ledger() -> dict:
+    return {
+        "version": 1,
+        "created_at": datetime.now().astimezone().isoformat(),
+        "updated_at": None,
+        "events": [],
+        "note_hits": {},
+    }
 
 
 def ensure_runtime_root(runtime_root: Path, resolution: RuntimeResolution | None = None) -> dict:
@@ -227,13 +318,25 @@ def _ensure_runtime_root(runtime_root: Path, resolution: RuntimeResolution | Non
         runtime_root / "index" / "by-scene.json": {},
         runtime_root / "index" / "by-pattern.json": {},
         runtime_root / "index" / "by-failure-mode.json": {},
-        runtime_root / "inbox" / "review-queue.json": {"pending": []},
+        runtime_root / "inbox" / "review-queue.json": {"pending": [], "reviewed": []},
+        runtime_root / "state" / "promotion-policy.json": default_promotion_policy(),
+        runtime_root / "state" / "promotion-ledger.json": default_promotion_ledger(),
+        runtime_root / "state" / "reuse-ledger.json": default_reuse_ledger(),
         runtime_root / "state" / "runtime-memory-manifest.json": default_manifest(runtime_root, resolution),
     }
 
     for file_path, data in defaults.items():
         if not file_path.exists():
             file_path.write_text(json.dumps(data, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+            continue
+        try:
+            existing = json.loads(file_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        if isinstance(existing, dict) and isinstance(data, dict):
+            merged = _merge_missing_defaults(existing, data)
+            if merged != existing:
+                file_path.write_text(json.dumps(merged, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
 
     readme_path = runtime_root / "README.md"
     if not readme_path.exists():
@@ -276,6 +379,16 @@ def _load_json(path: Path) -> dict:
 
 def _write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+
+
+def _merge_missing_defaults(existing: dict, default: dict) -> dict:
+    merged = dict(existing)
+    for key, value in default.items():
+        if key not in merged:
+            merged[key] = value
+        elif isinstance(merged[key], dict) and isinstance(value, dict):
+            merged[key] = _merge_missing_defaults(merged[key], value)
+    return merged
 
 
 def append_capture(runtime_root: Path, record: dict) -> Path:
@@ -341,6 +454,273 @@ def read_recent_captures(runtime_root: Path, scene: str | None = None, limit: in
     return found
 
 
+def read_promoted_field_notes(runtime_root: Path, scene: str | None = None, limit: int = 3) -> list[dict]:
+    ranked = rank_promoted_field_notes(runtime_root, scene=scene, limit=limit)
+    return [
+        {
+            "path": item["path"],
+            "slug": item["slug"],
+            "title": item["title"],
+            "excerpt": item["excerpt"],
+            "matched_tokens": item["matched_tokens"],
+            "weighted_overlap": item["weighted_overlap"],
+            "title_overlap": item["title_overlap"],
+        }
+        for item in ranked[:limit]
+    ]
+
+
+def rank_promoted_field_notes(runtime_root: Path, scene: str | None = None, limit: int | None = None) -> list[dict]:
+    runtime_root = runtime_root.expanduser()
+    note_files = sorted((runtime_root / "promoted" / "field-notes").glob("*.md"), reverse=True)
+    promotion_ledger = _load_json(runtime_root / "state" / "promotion-ledger.json")
+    note_stats = promotion_ledger.get("note_stats", {})
+    query_tokens = _tokenize_note(scene or "")
+    note_entries = []
+    token_frequencies: Counter[str] = Counter()
+
+    for note_file in note_files:
+        text = note_file.read_text(encoding="utf-8")
+        title = _note_title(note_file, text)
+        note_tokens = _tokenize_note(f"{note_file.stem} {_retrieval_text(text)}")
+        title_tokens = _tokenize_note(f"{note_file.stem} {title}")
+        token_frequencies.update(note_tokens)
+        note_entries.append(
+            {
+                "path": str(note_file),
+                "slug": note_file.stem,
+                "title": title,
+                "excerpt": _note_excerpt(text),
+                "note_tokens": note_tokens,
+                "title_tokens": title_tokens,
+                "reuse_count": int(note_stats.get(note_file.stem, {}).get("reuse_count", 0)),
+                "recency": note_file.stat().st_mtime,
+            }
+        )
+
+    token_weights = _token_idf_weights(token_frequencies, max(1, len(note_entries)))
+    min_shared_tokens = _minimum_shared_tokens(query_tokens)
+    ranked = []
+    for entry in note_entries:
+        shared_tokens = query_tokens & entry["note_tokens"]
+        shared_count = len(shared_tokens)
+        title_overlap = _token_overlap(query_tokens, entry["title_tokens"]) if query_tokens else 0.0
+        weighted_overlap = _weighted_token_overlap(query_tokens, shared_tokens, token_weights)
+        strong_match = (
+            shared_count >= min_shared_tokens
+            or title_overlap >= 0.55
+            or weighted_overlap >= PROMOTED_RETRIEVAL_WEIGHT_FLOOR
+        )
+        combined_rank_score = weighted_overlap + (0.6 * title_overlap)
+        ranked.append(
+            entry
+            | {
+                "matched_tokens": sorted(shared_tokens),
+                "matched_token_count": shared_count,
+                "title_overlap": round(title_overlap, 4),
+                "weighted_overlap": round(weighted_overlap, 4),
+                "combined_rank_score": round(combined_rank_score, 4),
+                "has_overlap": shared_count > 0,
+                "strong_match": strong_match if query_tokens else True,
+            }
+        )
+
+    ranked.sort(
+        key=lambda item: (
+            item["strong_match"],
+            item["combined_rank_score"],
+            item["title_overlap"],
+            item["matched_token_count"],
+            item["reuse_count"],
+            item["recency"],
+        ),
+        reverse=True,
+    )
+    if query_tokens:
+        strong_matches = [item for item in ranked if item["strong_match"]]
+        overlapping = [item for item in ranked if item["has_overlap"]]
+        ranked = strong_matches or overlapping or ranked
+        if ranked:
+            top_score = ranked[0]["combined_rank_score"]
+            floor = max(PROMOTED_RETRIEVAL_WEIGHT_FLOOR, top_score * 0.5)
+            filtered = [
+                item
+                for item in ranked
+                if item["combined_rank_score"] >= floor or item["title_overlap"] >= 0.5
+            ]
+            ranked = filtered or ranked[:1]
+
+    for item in ranked:
+        item.pop("note_tokens", None)
+        item.pop("title_tokens", None)
+
+    if limit is None:
+        return ranked
+    return ranked[:limit]
+
+
+def record_promoted_note_reuse(
+    runtime_root: Path,
+    promoted_notes: list[dict],
+    *,
+    scene: str | None = None,
+    source: str = "read_runtime_context",
+    reuse_history_limit: int = 500,
+) -> dict:
+    runtime_root = runtime_root.expanduser()
+    reuse_ledger_path = runtime_root / "state" / "reuse-ledger.json"
+    promotion_ledger_path = runtime_root / "state" / "promotion-ledger.json"
+
+    if not promoted_notes:
+        return {"recorded": 0, "events": []}
+
+    reuse_ledger = _load_json(reuse_ledger_path)
+    promotion_ledger = _load_json(promotion_ledger_path)
+    note_stats = promotion_ledger.setdefault("note_stats", {})
+    timestamp = datetime.now().astimezone().isoformat()
+    seen_slugs: set[str] = set()
+    events = []
+
+    for note in promoted_notes:
+        slug = note.get("slug") or Path(note["path"]).stem
+        if slug in seen_slugs:
+            continue
+        seen_slugs.add(slug)
+        note_path = str(Path(note["path"]).expanduser())
+        event = {
+            "timestamp": timestamp,
+            "source": source,
+            "scene": scene,
+            "note_slug": slug,
+            "note_path": note_path,
+        }
+        events.append(event)
+
+        hit_entry = reuse_ledger.setdefault("note_hits", {}).setdefault(
+            slug,
+            {
+                "note_path": note_path,
+                "count": 0,
+                "last_hit_at": None,
+                "scenes": [],
+                "sources": [],
+            },
+        )
+        hit_entry["note_path"] = note_path
+        hit_entry["count"] += 1
+        hit_entry["last_hit_at"] = timestamp
+        if scene and scene not in hit_entry["scenes"]:
+            hit_entry["scenes"].append(scene)
+        if source not in hit_entry["sources"]:
+            hit_entry["sources"].append(source)
+
+        note_entry = note_stats.setdefault(
+            slug,
+            {
+                "note_path": note_path,
+                "title": note.get("title") or slug.replace("-", " "),
+                "created_at": timestamp,
+                "last_updated_at": timestamp,
+                "source_session_ids": [],
+                "merge_count": 0,
+                "repo_candidate_paths": [],
+                "archived": False,
+                "archive_reason": None,
+                "reuse_count": 0,
+                "last_action": None,
+            },
+        )
+        note_entry["note_path"] = note_path
+        note_entry["reuse_count"] = int(note_entry.get("reuse_count", 0)) + 1
+        note_entry["last_reused_at"] = timestamp
+        note_entry["last_updated_at"] = timestamp
+
+    reuse_ledger.setdefault("events", []).extend(events)
+    if len(reuse_ledger["events"]) > reuse_history_limit:
+        reuse_ledger["events"] = reuse_ledger["events"][-reuse_history_limit:]
+    reuse_ledger["updated_at"] = timestamp
+    promotion_ledger["updated_at"] = timestamp
+
+    _write_json(reuse_ledger_path, reuse_ledger)
+    _write_json(promotion_ledger_path, promotion_ledger)
+    return {"recorded": len(events), "events": events}
+
+
+def _tokenize_note(text: str) -> set[str]:
+    tokens = set()
+    for token in PROMOTED_NOTE_TOKEN_RE.findall(text.lower()):
+        if token in PROMOTED_NOTE_STOPWORDS or len(token) < 3:
+            continue
+        tokens.add(token)
+        for subtoken in token.replace("_", "-").split("-"):
+            if subtoken not in PROMOTED_NOTE_STOPWORDS and len(subtoken) >= 3:
+                tokens.add(subtoken)
+    return tokens
+
+
+def _token_overlap(query_tokens: set[str], note_tokens: set[str]) -> float:
+    if not query_tokens or not note_tokens:
+        return 0.0
+    return len(query_tokens & note_tokens) / max(1, min(len(query_tokens), len(note_tokens)))
+
+
+def _retrieval_text(text: str) -> str:
+    lines = []
+    skip_section = False
+    for line in text.splitlines():
+        if line.startswith("## "):
+            section_title = line[3:].strip().lower()
+            skip_section = section_title in RETRIEVAL_EXCLUDED_SECTION_TITLES
+            if skip_section:
+                continue
+        if skip_section:
+            continue
+        if "/Users/" in line or ".codex/" in line:
+            continue
+        lines.append(line)
+    return "\n".join(lines)
+
+
+def _minimum_shared_tokens(query_tokens: set[str]) -> int:
+    if len(query_tokens) <= 3:
+        return 1
+    if len(query_tokens) <= 6:
+        return 2
+    return 3
+
+
+def _token_idf_weights(token_frequencies: Counter[str], note_count: int) -> dict[str, float]:
+    weights = {}
+    for token, frequency in token_frequencies.items():
+        weights[token] = math.log1p(note_count / max(1, frequency))
+    return weights
+
+
+def _weighted_token_overlap(
+    query_tokens: set[str],
+    shared_tokens: set[str],
+    token_weights: dict[str, float],
+) -> float:
+    if not query_tokens:
+        return 0.0
+    shared_weight = sum(token_weights.get(token, 1.0) for token in shared_tokens)
+    query_weight = sum(token_weights.get(token, 1.0) for token in query_tokens)
+    return shared_weight / max(1.0, query_weight)
+
+
+def _note_title(note_file: Path, text: str) -> str:
+    for line in text.splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return note_file.stem.replace("-", " ")
+
+
+def _note_excerpt(text: str, max_length: int = 220) -> str:
+    lines = [line.strip() for line in text.splitlines() if line.strip() and not line.startswith("#")]
+    excerpt = " ".join(lines[:4])
+    return excerpt[:max_length].strip()
+
+
 def validate_runtime_root(runtime_root: Path) -> list[str]:
     runtime_root = runtime_root.expanduser()
     errors = []
@@ -354,6 +734,9 @@ def validate_runtime_root(runtime_root: Path) -> list[str]:
         runtime_root / "index" / "by-pattern.json",
         runtime_root / "index" / "by-failure-mode.json",
         runtime_root / "inbox" / "review-queue.json",
+        runtime_root / "state" / "promotion-policy.json",
+        runtime_root / "state" / "promotion-ledger.json",
+        runtime_root / "state" / "reuse-ledger.json",
         runtime_root / "state" / "runtime-memory-manifest.json",
     ]
 

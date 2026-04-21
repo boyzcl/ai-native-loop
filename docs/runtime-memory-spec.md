@@ -38,8 +38,10 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
   - 从 runtime capture 升级后的本地 field note
 - `promoted/archive/`
   - 低价值或已被合并覆盖的旧经验
+- `promoted/repo-candidates/`
+  - 通过更强 gate 的 repo 候选资产，但不会自动写回 repo 公共层
 - `state/`
-  - runtime manifest 与最近一次 review 状态
+  - runtime manifest、promotion policy、promotion ledger、reuse ledger 与最近一次 review 状态
 
 ## Capture Schema
 
@@ -84,6 +86,13 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 - 最多 3 条 promoted field notes
 - 最多 2 条 pattern / failure references
 
+当 retrieval 显式请求 promoted notes 且启用 reuse 记录时：
+
+- note hit 会写入 `runtime/state/reuse-ledger.json`
+- 对应 promoted note 的 `reuse_count` 会回写到 `promotion-ledger`
+- 后续 repo candidate gate 可以使用真实 reuse 信号，而不只靠写作形态推断
+- `2026-04-21` 起，promoted retrieval 会剔除 `Source Runtime Captures` / `Merge History` / 绝对路径噪音，并优先返回 title-weighted 的高置信命中，避免 host path 与 source path 污染 reuse evidence
+
 ## Review Rule
 
 不是每条 capture 都值得升级。
@@ -94,6 +103,18 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 - 形成可迁移做法
 - 改变后续触发、分工或评估方式
 - 值得进入 benchmark / pattern / failure mode
+
+## Promotion Worker Rule
+
+新增 `scripts/promotion_worker.py` 后，runtime review queue 默认可被周期消费。
+
+最小动作边界：
+
+- 自动 triage `review queue`
+- 自动判定 `keep_raw / promote_to_field_note / merge_into_existing_note / archive`
+- 只生成 `repo candidate`，不自动改 repo 公开资产
+- 先执行 dedup / merge，再考虑新建
+- backlog、working-set ceiling、archive 一起生效，避免只做 promotion 不做容量治理
 
 ## Helper Scripts
 
@@ -106,7 +127,17 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 - `scripts/write_runtime_capture.py`
   - 读取一条 JSON 记录并追加到 runtime capture，同时补 runtime host 信息
 - `scripts/read_runtime_context.py`
-  - 按 `scene` 读取最近 captures，供下一轮调用前预读取
+  - 按 `scene` 读取最近 captures；加 `--include-promoted` 时同时返回相关 promoted field notes；加 `--record-reuse` 时写入 reuse ledger
+- `scripts/promotion_worker.py`
+  - 消费 review queue，执行本地自动晋升、merge、archive 与 gated repo candidate 生成
+- `scripts/runtime_governance_report.py`
+  - 输出 backlog、promote、merge、archive、reuse、repo candidate 的治理指标
+- `scripts/review_repo_candidates.py`
+  - 列出并更新 `pending / accepted / rejected` repo candidate review 状态
+- `scripts/retrieval_forward_test.py`
+  - 对 promoted retrieval 跑 baseline / current forward test，记录 false positive / false negative 风险
+- `scripts/runtime_governance_stress_test.py`
+  - 基于当前 runtime 做 temp replay，验证更大 backlog / 更长周期下的容量治理是否稳定
 
 ## Non-Goals
 

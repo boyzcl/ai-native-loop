@@ -89,7 +89,7 @@ python3 ~/.codex/skills/ai-native-loop/scripts/init_runtime_memory.py --host cod
 - `medium+` 任务结束后保留 `Loop Recovery Block`
 - 同结构内容写入本地 `runtime capture`
 - 下一次调用时只按需读取少量相关经验
-- 值得提升的样本再进入 field note / pattern / failure mode / benchmark
+- 值得提升的样本再进入 field note / repo candidate，repo 公开资产继续保持 gate
 
 运行时规格见 [runtime-memory-spec.md](docs/runtime-memory-spec.md)，四层拆分见 [host-abstraction.md](docs/host-abstraction.md)。
 
@@ -157,6 +157,12 @@ After：
 - `scripts/smoke_test_runtime_memory.py`
 - `scripts/write_runtime_capture.py`
 - `scripts/read_runtime_context.py`
+- `scripts/promotion_worker.py`
+- `scripts/runtime_governance_report.py`
+- `scripts/review_repo_candidates.py`
+- `scripts/retrieval_forward_test.py`
+- `scripts/runtime_governance_stress_test.py`
+- `scripts/set_repo_candidate_status.py`
 
 它们分别用于：
 
@@ -164,7 +170,13 @@ After：
 - 校验 runtime 结构与 capture schema
 - 用临时目录跑一轮端到端 smoke test
 - 把一条结构化记录追加到本地 runtime capture
-- 按 `scene` 读取最近的 runtime 经验
+- 按 `scene` 读取最近的 runtime 经验，并可带上 promoted field notes；必要时把命中写回 reuse ledger
+- 消费 review queue，执行本地自动晋升、merge、archive 与 gated repo candidate
+- 输出 backlog / promote / merge / archive / reuse / repo candidate 的治理指标
+- 列出并更新 repo candidate review workflow 的 `pending / accepted / rejected`
+- 对 promoted retrieval 跑 forward test，并记录 false positive / false negative 风险
+- 用 temp runtime replay 更大 backlog / 更长周期，验证 working set 与 candidate count 是否仍受控
+- 为 repo candidate 写入 `pending / accepted / rejected` 的 review 状态，而不直接改 repo 公共资产
 - 根据宿主、环境变量和显式参数解析默认 runtime root
 
 ## Feedback Loop
