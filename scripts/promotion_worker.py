@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from runtime_memory_lib import ensure_runtime_root, resolve_runtime_resolution
+from runtime_memory_lib import ensure_runtime_root, parse_runtime_timestamp, resolve_runtime_resolution
 
 
 TOKEN_RE = re.compile(r"[a-z0-9][a-z0-9_-]+")
@@ -105,17 +105,34 @@ def normalize_tokens(*parts: str) -> set[str]:
     return tokens
 
 
+def textify(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, list):
+        return "; ".join(textify(item) for item in value if textify(item))
+    return str(value)
+
+
+def string_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [textify(item) for item in value if textify(item)]
+    rendered = textify(value)
+    return [rendered] if rendered else []
+
+
 def combined_record_text(record: dict[str, Any]) -> str:
     return "\n".join(
         [
-            record.get("scene", ""),
-            record.get("objective", ""),
-            record.get("initial_block", ""),
-            record.get("what_worked", ""),
-            record.get("remaining_risk", ""),
-            record.get("next_input", ""),
-            " ".join(record.get("candidate_pattern_tags", [])),
-            " ".join(record.get("candidate_failure_tags", [])),
+            textify(record.get("scene", "")),
+            textify(record.get("objective", "")),
+            textify(record.get("initial_block", "")),
+            textify(record.get("what_worked", "")),
+            textify(record.get("remaining_risk", "")),
+            textify(record.get("next_input", "")),
+            " ".join(string_list(record.get("candidate_pattern_tags", []))),
+            " ".join(string_list(record.get("candidate_failure_tags", []))),
         ]
     )
 
@@ -191,7 +208,7 @@ def token_overlap(left: set[str], right: set[str]) -> float:
 
 
 def shared_tag_overlap(record: dict[str, Any], note: PromotedNote) -> float:
-    tags = set(record.get("candidate_pattern_tags", []) + record.get("candidate_failure_tags", []))
+    tags = set(string_list(record.get("candidate_pattern_tags", [])) + string_list(record.get("candidate_failure_tags", [])))
     note_tags = set(TOKEN_RE.findall(note.text.lower()))
     if not tags:
         return 0.0
@@ -211,19 +228,19 @@ def score_record(
     recent_scene_counts: Counter[str],
     recent_tag_counts: Counter[str],
 ) -> tuple[int, dict[str, bool], int]:
-    pattern_tags = record.get("candidate_pattern_tags", [])
-    failure_tags = record.get("candidate_failure_tags", [])
+    pattern_tags = string_list(record.get("candidate_pattern_tags", []))
+    failure_tags = string_list(record.get("candidate_failure_tags", []))
     combined = combined_record_text(record).lower()
     repeat_signal = scene_counts[record.get("scene", "")] > 1 or any(
         tag_counts[tag] > 1 for tag in pattern_tags + failure_tags
     )
     transfer_signal = len(set(pattern_tags + failure_tags)) >= 2
     specificity_signal = min(
-        len(record.get("what_worked", "")),
-        len(record.get("remaining_risk", "")),
-        len(record.get("next_input", "")),
+        len(textify(record.get("what_worked", ""))),
+        len(textify(record.get("remaining_risk", ""))),
+        len(textify(record.get("next_input", ""))),
     ) >= 80
-    future_judgment_signal = len(record.get("next_input", "")) >= 100 and any(
+    future_judgment_signal = len(textify(record.get("next_input", ""))) >= 100 and any(
         keyword in combined
         for keyword in ["freeze", "scope", "checkpoint", "gate", "threshold", "review", "archive", "merge", "promote", "evidence"]
     )
@@ -278,8 +295,8 @@ def find_best_note_match(record: dict[str, Any], record_tokens: set[str], notes:
 
 def render_field_note(record: dict[str, Any], score: int, signals: dict[str, bool], source_capture: Path) -> str:
     title = titleize(record.get("scene", "field note"))
-    pattern_tags = record.get("candidate_pattern_tags", [])
-    failure_tags = record.get("candidate_failure_tags", [])
+    pattern_tags = string_list(record.get("candidate_pattern_tags", []))
+    failure_tags = string_list(record.get("candidate_failure_tags", []))
     signal_lines = [f"- `{name}`: {'yes' if enabled else 'no'}" for name, enabled in signals.items()]
     pattern_lines = [f"- `{tag}`" for tag in pattern_tags] or ["- none"]
     failure_lines = [f"- `{tag}`" for tag in failure_tags] or ["- none"]
@@ -293,31 +310,31 @@ def render_field_note(record: dict[str, Any], score: int, signals: dict[str, boo
             "",
             "## Objective",
             "",
-            f"- {record.get('objective', '')}",
+            f"- {textify(record.get('objective', ''))}",
             "",
             "## Initial Block",
             "",
-            f"- {record.get('initial_block', '')}",
+            f"- {textify(record.get('initial_block', ''))}",
             "",
             "## Intervention Level",
             "",
-            f"- `{record.get('intervention_level', '')}`",
+            f"- `{textify(record.get('intervention_level', ''))}`",
             "",
             "## Core Artifacts Produced",
             "",
-            *[f"- `{artifact}`" for artifact in record.get("artifacts_produced", [])],
+            *[f"- `{artifact}`" for artifact in string_list(record.get("artifacts_produced", []))],
             "",
             "## What Worked",
             "",
-            f"- {record.get('what_worked', '')}",
+            f"- {textify(record.get('what_worked', ''))}",
             "",
             "## What Failed Or Remained Risky",
             "",
-            f"- {record.get('remaining_risk', '')}",
+            f"- {textify(record.get('remaining_risk', ''))}",
             "",
             "## Re-input",
             "",
-            f"- {record.get('next_input', '')}",
+            f"- {textify(record.get('next_input', ''))}",
             "",
             "## Candidate Pattern Tags",
             "",
@@ -391,8 +408,8 @@ def append_merge(note: PromotedNote, record: dict[str, Any], ledger: dict[str, A
             "",
             f"- `{record.get('timestamp', '')}` merged `{record.get('session_id', '')}`",
             f"  - scene: `{record.get('scene', '')}`",
-            f"  - what_worked: {record.get('what_worked', '')}",
-            f"  - next_input: {record.get('next_input', '')}",
+            f"  - what_worked: {textify(record.get('what_worked', ''))}",
+            f"  - next_input: {textify(record.get('next_input', ''))}",
             "",
             "## Source Runtime Captures",
             "",
@@ -443,7 +460,7 @@ def write_archive_record(runtime_root: Path, record: dict[str, Any], reason: str
             "",
             "## Next Input",
             "",
-            f"- {record.get('next_input', '')}",
+            f"- {textify(record.get('next_input', ''))}",
             "",
         ]
     )
@@ -559,7 +576,7 @@ def maybe_create_repo_candidate(
             "",
             "## Candidate Tags",
             "",
-            *[f"- `{tag}`" for tag in record.get("candidate_pattern_tags", []) + record.get("candidate_failure_tags", [])],
+            *[f"- `{tag}`" for tag in string_list(record.get("candidate_pattern_tags", [])) + string_list(record.get("candidate_failure_tags", []))],
             "",
             "## Next Review",
             "",
@@ -737,6 +754,7 @@ def process_pending(
     ledger: dict[str, Any],
     policy: dict[str, Any],
     limit: int | None = None,
+    trigger_source: str | None = None,
 ) -> dict[str, Any]:
     pending_items = parse_pending(queue)
     pending_before = len(pending_items)
@@ -752,20 +770,20 @@ def process_pending(
     tag_counts = Counter(
         tag
         for record in captures
-        for tag in record.get("candidate_pattern_tags", []) + record.get("candidate_failure_tags", [])
+        for tag in string_list(record.get("candidate_pattern_tags", [])) + string_list(record.get("candidate_failure_tags", []))
     )
     now = datetime.now().astimezone()
     recent_cutoff = now - timedelta(days=7)
     recent_records = [
         record
         for record in captures
-        if datetime.fromisoformat(record["timestamp"]) >= recent_cutoff
+        if parse_runtime_timestamp(record["timestamp"]) >= recent_cutoff
     ]
     recent_scene_counts = Counter(record.get("scene", "") for record in recent_records)
     recent_tag_counts = Counter(
         tag
         for record in recent_records
-        for tag in record.get("candidate_pattern_tags", []) + record.get("candidate_failure_tags", [])
+        for tag in string_list(record.get("candidate_pattern_tags", [])) + string_list(record.get("candidate_failure_tags", []))
     )
 
     notes = load_promoted_notes(runtime_root, ledger)
@@ -921,6 +939,10 @@ def process_pending(
     summary = {
         "run_id": run_id,
         "timestamp": datetime.now().astimezone().isoformat(),
+        "trigger_source": trigger_source,
+        "requested_limit": limit,
+        "reconcile_only": limit == 0,
+        "processed_count": len(reviewed_items),
         "pending_before": pending_before,
         "pending_after": pending_after,
         "batch_size": batch_size,
@@ -962,6 +984,12 @@ def main() -> int:
         default=None,
         help="Optional hard cap on how many pending items to process in this run.",
     )
+    parser.add_argument(
+        "--trigger-source",
+        choices=("manual", "invocation", "automation"),
+        default=None,
+        help="Optional label for the caller that initiated this promotion run.",
+    )
     args = parser.parse_args()
 
     resolution = resolve_runtime_resolution(host=args.host, root=args.root)
@@ -976,7 +1004,14 @@ def main() -> int:
     ledger = load_json(ledger_path)
     policy = load_json(policy_path)
 
-    summary = process_pending(runtime_root, queue, ledger, policy, limit=args.limit)
+    summary = process_pending(
+        runtime_root,
+        queue,
+        ledger,
+        policy,
+        limit=args.limit,
+        trigger_source=args.trigger_source,
+    )
 
     write_json(queue_path, queue)
     write_json(ledger_path, ledger)

@@ -32,6 +32,14 @@ README、`SKILL.md` metadata、`CHANGELOG.md`、release notes 和状态文档应
 
 当前迭代重点已经从“把 runtime compounding 接通”切换为“让受限复利变得可验证、可 review、可长期维护”。
 
+`2026-04-27` 本地实现继续往前推进到：
+
+- promotion trigger mechanism 已接通到本地 runtime cadence
+- pending queue 主路径改为 invocation-driven bounded cycle 自动消费
+- host 级 automation 只保留低频 reconcile，不再承担主 cycle 消费
+- repo candidate 仍只停留在 runtime 候选层，不等于 repo 公共资产
+- 这仍然只是本地可验证触发层，不应过度承诺长期稳定自治已经成立
+
 当前优先级：
 
 1. 继续积累更长周期的真实 reuse 样本，确认 retrieval heuristic 在真实任务里仍稳定

@@ -115,6 +115,7 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 - 只生成 `repo candidate`，不自动改 repo 公开资产
 - 先执行 dedup / merge，再考虑新建
 - backlog、working-set ceiling、archive 一起生效，避免只做 promotion 不做容量治理
+- 周期触发层应通过薄封装脚本接入，避免把宿主 automation 逻辑直接写进多条命令拼接
 
 ## Helper Scripts
 
@@ -125,11 +126,15 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
 - `scripts/smoke_test_runtime_memory.py`
   - 用临时目录跑一轮端到端 smoke test，并校验 host-aware manifest
 - `scripts/write_runtime_capture.py`
-  - 读取一条 JSON 记录并追加到 runtime capture，同时补 runtime host 信息
+  - 读取一条 JSON 记录并追加到 runtime capture，同时补 runtime host 信息；对 `medium+` 且进入 review queue 的样本默认立即尝试一次 bounded local promotion cycle
 - `scripts/read_runtime_context.py`
   - 按 `scene` 读取最近 captures；加 `--include-promoted` 时同时返回相关 promoted field notes；加 `--record-reuse` 时写入 reuse ledger
 - `scripts/promotion_worker.py`
   - 消费 review queue，执行本地自动晋升、merge、archive 与 gated repo candidate 生成
+- `scripts/run_promotion_cycle.py`
+  - 以本地 cadence 触发一次 bounded promotion cycle，带运行锁、前后快照和结构化 JSON 输出
+- `scripts/run_promotion_reconcile.py`
+  - 以 `--limit 0` 方式触发 repo candidate reconcile，并附带 governance report 与结构化 JSON 输出
 - `scripts/runtime_governance_report.py`
   - 输出 backlog、promote、merge、archive、reuse、repo candidate 的治理指标
 - `scripts/review_repo_candidates.py`
@@ -138,6 +143,19 @@ runtime root 不再被协议层写死为单一路径，而是按宿主解析。
   - 对 promoted retrieval 跑 baseline / current forward test，记录 false positive / false negative 风险
 - `scripts/runtime_governance_stress_test.py`
   - 基于当前 runtime 做 temp replay，验证更大 backlog / 更长周期下的容量治理是否稳定
+
+## Trigger Telemetry Rule
+
+本地触发层不应把 scheduler 元信息直接塞进 repo 层，也不应默认把每次调度都提升成新的 review 样本。
+
+第一版约束：
+
+- 主触发优先是 invocation-driven，而不是 host cron
+- trigger run history 写入 `runtime/state/promotion-trigger-history.jsonl`
+- 并发运行靠 `runtime/state/locks/` 下的共享锁避免互相踩写
+- 如需把 trigger 运行写入 runtime capture，默认只允许 `raw_only`
+- trigger capture 只作为本地运行证据，不进入 repo 自动发布链路
+- host 级自动化默认只保留低频 reconcile，不再承担主 cycle 消费职责
 
 ## Non-Goals
 

@@ -1,7 +1,7 @@
 interface:
   display_name: "AI Native Loop"
   short_description: "Use when the blocker is a broken collaboration loop, not a missing one-shot answer"
-  default_prompt: "Use $ai-native-loop when the user explicitly asks for it or when you have already determined the real blocker is a broken collaboration loop. Do not rely on implicit invocation for one-shot answers. Diagnose the loop, build a task packet, keep decision boundaries clear, and for medium-plus tasks end the response with a recovery block plus a local runtime capture in the resolved runtime root for the current host. For Codex, the default runtime convention is ~/.codex/skills/ai-native-loop/runtime/ unless AI_NATIVE_LOOP_RUNTIME_ROOT or an explicit root overrides it."
+  default_prompt: "Use $ai-native-loop when the user explicitly asks for it or when you have already determined the real blocker is a broken collaboration loop. Do not rely on implicit invocation for one-shot answers. Diagnose the loop, build a task packet, keep decision boundaries clear, and for medium-plus tasks end the response with a recovery block plus a local runtime capture in the resolved runtime root for the current host. After the capture write, attempt one bounded local promotion cycle as part of the same invocation recovery path. For Codex, the default runtime convention is ~/.codex/skills/ai-native-loop/runtime/ unless AI_NATIVE_LOOP_RUNTIME_ROOT or an explicit root overrides it."
 
 policy:
   allow_implicit_invocation: false

@@ -156,6 +156,8 @@ After：
 - `scripts/validate_runtime_memory.py`
 - `scripts/smoke_test_runtime_memory.py`
 - `scripts/write_runtime_capture.py`
+- `scripts/run_promotion_cycle.py`
+- `scripts/run_promotion_reconcile.py`
 - `scripts/read_runtime_context.py`
 - `scripts/promotion_worker.py`
 - `scripts/runtime_governance_report.py`
@@ -170,6 +172,9 @@ After：
 - 校验 runtime 结构与 capture schema
 - 用临时目录跑一轮端到端 smoke test
 - 把一条结构化记录追加到本地 runtime capture
+- 在 `medium+` capture 写入后默认立即尝试一次 bounded local promotion cycle
+- 手动触发一次 bounded promotion cycle
+- 手动触发一次 reconcile cycle
 - 按 `scene` 读取最近的 runtime 经验，并可带上 promoted field notes；必要时把命中写回 reuse ledger
 - 消费 review queue，执行本地自动晋升、merge、archive 与 gated repo candidate
 - 输出 backlog / promote / merge / archive / reuse / repo candidate 的治理指标

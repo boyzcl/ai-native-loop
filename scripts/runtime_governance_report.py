@@ -37,6 +37,7 @@ def main() -> int:
     queue = load_json(runtime_root / "inbox" / "review-queue.json")
     promotion_ledger = load_json(runtime_root / "state" / "promotion-ledger.json")
     reuse_ledger = load_json(runtime_root / "state" / "reuse-ledger.json")
+    trigger_history_path = runtime_root / "state" / "promotion-trigger-history.jsonl"
     field_note_files = sorted((runtime_root / "promoted" / "field-notes").glob("*.md"))
     archive_files = sorted((runtime_root / "promoted" / "archive").glob("*.md"))
     repo_candidate_files = sorted((runtime_root / "promoted" / "repo-candidates").glob("*.md"))
@@ -68,6 +69,13 @@ def main() -> int:
         for path in active_candidates
         if note_stats.get(path.stem, {}).get("repo_candidate_status") == "accepted"
     ]
+    trigger_events = []
+    if trigger_history_path.exists():
+        for line in trigger_history_path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            trigger_events.append(json.loads(line))
+    last_trigger_event = trigger_events[-1] if trigger_events else {}
 
     report = {
         "runtime_root": str(runtime_root),
@@ -90,6 +98,11 @@ def main() -> int:
         "repo_candidate_accept_rate": safe_rate(len(accepted_candidates), len(candidate_notes)),
         "last_promotion_run_id": promotion_ledger.get("last_run_id"),
         "last_reuse_at": reuse_ledger.get("updated_at"),
+        "trigger_event_count": len(trigger_events),
+        "last_trigger_event_at": last_trigger_event.get("finished_at"),
+        "last_trigger_event_kind": last_trigger_event.get("run_kind"),
+        "last_trigger_event_status": last_trigger_event.get("status"),
+        "last_trigger_event_source": last_trigger_event.get("trigger_source"),
     }
     print(json.dumps(report, ensure_ascii=True, indent=2))
     return 0

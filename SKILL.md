@@ -20,6 +20,7 @@ metadata:
 - 当前版本优先显式调用 `$ai-native-loop`。
 - 不把隐式触发当作稳定能力承诺。
 - 如果当前运行环境允许文件系统写入，对 `medium` 及以上任务默认写入本地 runtime capture。
+- 对 `medium` 及以上且进入 review queue 的任务，runtime capture 写入后默认应立即尝试一次 bounded local promotion cycle。
 - 如果当前环境不允许写入本地 runtime，必须明确说明“未完成 runtime capture”，不要声称经验已经进入系统。
 
 ## Runtime 宿主
@@ -157,6 +158,7 @@ metadata:
    - 最少记录：`scene`、`initial_block`、`artifacts_produced`、`what_worked`、`remaining_risk`、`next_input`。
    - 这个回收块默认放在本轮主输出的末尾，作为最后一个协议块，而不是散落在正文里。
    - runtime capture 默认写入当前宿主解析出的 `runtime_root/captures/YYYY-MM-DD.jsonl`。
+   - capture 写入后，默认立即尝试一次 bounded local promotion cycle；如果宿主只支持 helper script 级集成，也应把这一步视作 invocation recovery 的一部分。
    - 只有当样本值得沉淀时，再把 recovery block 扩成 field note。
    - 让经验可以继续进入 pattern、failure mode 或 benchmark，而不是只停在当前轮。
 
@@ -170,6 +172,7 @@ metadata:
 - 没有越权替用户做不可逆判断
 - `medium+` 任务有明确 `next_input`
 - `medium+` 任务已写入 runtime capture，或明确说明为何未写入
+- `medium+` 任务在写入 capture 后，已尝试 invocation-time bounded promotion cycle，或明确说明为何未尝试
 - 没有把“协议可迁移”误说成“宿主已支持”
 
 ## 信息不足时的协议

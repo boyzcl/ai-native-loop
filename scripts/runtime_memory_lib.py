@@ -214,6 +214,13 @@ def enrich_capture_record(record: dict, resolution: RuntimeResolution) -> dict:
     return enriched
 
 
+def parse_runtime_timestamp(value: str) -> datetime:
+    parsed = datetime.fromisoformat(value)
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=datetime.now().astimezone().tzinfo)
+    return parsed.astimezone()
+
+
 def default_manifest(runtime_root: Path, resolution: RuntimeResolution | None = None) -> dict:
     manifest = {
         "version": 1,
