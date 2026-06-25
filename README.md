@@ -148,6 +148,16 @@ After：
 - 实验模板： [experiment-log-template.md](docs/experiment-log-template.md)
 - 当前 benchmark 汇总： [benchmark-results-v0.2.0.md](docs/benchmark-results-v0.2.0.md)
 
+提交前可以运行与 CI 一致的确定性检查：
+
+```bash
+bash scripts/check-release-consistency.sh
+python3 -m py_compile scripts/*.py
+python3 scripts/smoke_test_runtime_memory.py
+```
+
+`scripts/retrieval_forward_test.py` 会读取当前宿主的 runtime root，适合做本机扩展验证，不作为默认 CI 必过项。
+
 ## Runtime Helpers
 
 本轮新增的 runtime helper scripts 已统一支持 `--host` / `--root`：
